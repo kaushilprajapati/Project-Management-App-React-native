@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-const User = require('../models/user');
+const Project = require('../models/project');
 
 const ObjectId = require('mongoose').Types.ObjectId;
 //Get Post Put Delete
 
 //Get API
 router.get('/', async(req,res) => {
-    const userList = await User.find();
-    if(!userList)
+    const projectList = await Project.find();
+    if(!projectList)
     {
     res.status(500).json({success:false})
     }
 
-   res.status(200).send(userList); 
+   res.status(200).send(projectList); 
 });
 
 //get 1 employee
@@ -23,14 +23,14 @@ router.get('/:id', async(req,res) => {
     if(ObjectId.isValid(req.params.id))
     {
 
-    const userList = await User.findById(req.params.id);
+    const projectList = await Project.findById(req.params.id);
 
-    if(!userList)
+    if(!projectList)
     {
     res.status(500).json({success:false})
     }
 
-   res.status(200).send(userList); 
+   res.status(200).send(projectList); 
     }
     else
     {
@@ -41,19 +41,19 @@ router.get('/:id', async(req,res) => {
 
 //Post API
 router.post('/', async(req,res) => { 
-    let user = new User({
-        email: req.body.email,
-        firstName: req.body.firstName,
-        jobTitle: req.body.jobTitle,
-        lastName: req.body.lastName,
-        isAdmin: req.body.isAdmin,
-        password: req.body.password
+    let project = new Project({
+    taskName: req.body.taskName,
+    taskDescription: req.body.taskDescription,
+    taskStartDate: req.body.taskStartDate,
+    taskEndDate: req.body.taskEndDate,
+    assignedMember:req.body.assignedMember,
+    taskRate: req.body.taskRate
     }) 
-    user = await user.save();
+    project = await project.save();
 
-    if(!user)
+    if(!project)
     return res.status(400).send('the user cannot be added')
-    res.send(user);
+    res.send(project);
     // emp.save((err, doc) =>
     // {
     //     if(err) {
@@ -74,14 +74,14 @@ router.delete('/:id', async(req,res) => {
     if(ObjectId.isValid(req.params.id))
     {
 
-    const userList = await User.findByIdAndRemove(req.params.id);
+    const projectList = await Project.findByIdAndRemove(req.params.id);
 
-    if(!userList)
+    if(!projectList)
     {
     res.status(500).json({success:false})
     }
 
-   res.status(200).send(userList); 
+   res.status(200).send(projectList); 
     }
     else
     {
@@ -94,23 +94,23 @@ router.delete('/:id', async(req,res) => {
 router.put('/:id', async(req,res) => {
     if(ObjectId.isValid(req.params.id))
     {
-        let user = {
-            email: req.body.email,
-            firstName: req.body.firstName,
-            jobTitle: req.body.jobTitle,
-            lastName: req.body.lastName,
-            isAdmin: req.body.isAdmin,
-            password: req.body.password
+        let project = {
+            taskName: req.body.taskName,
+            taskDescription: req.body.taskDescription,
+            taskStartDate: req.body.taskStartDate,
+            taskEndDate: req.body.taskEndDate,
+            assignedMember:req.body.assignedMember,
+            taskRate: req.body.taskRate
         };
  
-    const userList = await User.findByIdAndUpdate(req.params.id, {$set:user}, {new: true});
+    const projectList = await Project.findByIdAndUpdate(req.params.id, {$set:project}, {new: true});
 
-    if(!userList)
+    if(!projectList)
     {
     res.status(500).json({success:false})
     }
 
-   res.status(200).send(userList); 
+   res.status(200).send(projectList); 
     }
     else
     {

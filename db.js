@@ -7,6 +7,7 @@ const cors = require('cors');
 const app = express();
 const employeeRoutes = require('./routes/routes.js');
 const userRoutes = require('./routes/userRoutes.js');
+const projectRoutes = require('./routes/projectRoutes.js');
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.CONNECTION_STRING,{
     console.log('Database Connection is ready...')
     app.use('/employees',employeeRoutes);
     app.use('/users', userRoutes);
+    app.use('/projects', projectRoutes);
     app.listen(3000, ()=>{
     console.log('server is running http://localhost:3000');
 })
