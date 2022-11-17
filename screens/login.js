@@ -1,11 +1,63 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View , Button } from 'react-native';
+import axios from "axios";
+
+const baseUrl = "http://10.0.2.2:3000";
 
 export default function App({navigation})  {
 
     const [username , setUsername] = useState("");
     const [password , setpassword] = useState("");
+    const [data , setData] = useState("");
+
+
+    useEffect(() => {
+      getCharacters();
+    }, []);
+  
+     const getCharacters = () => {
+      
+      axios.get(`${baseUrl}/users`)
+      .then(function(response) {
+        // alert(JSON.stringify(response.data));
+        
+        setData(response.data);
+  
+        console.log(data);
+  
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
+  const adminHome = ()=>{navigation.navigate("AdminHome")}
+  const userHome = ()=>{navigation.navigate("UserHome")}
+  
+  const auth = () => {
+  
+    for(var i =0; i<data.length; i++) {
+      if(username.toLocaleLowerCase() === data[i].email && password.toLocaleLowerCase() === data[i].password){
+        if(data[i].isAdmin == true){
+          adminHome();
+        }
+        if(data[i].isAdmin == false)
+        {
+          userHome();
+        }
+        alert(' successfully login as ' + username);
+        
+        break;
+      }
+      else{
+        alert('enter valid username');
+      }
+    }
+  
+    
+  
+  }
 
     return (
             
@@ -18,13 +70,13 @@ export default function App({navigation})  {
     
             <TextInput
             style={styles.textBoxes}
-            placeholder="Enter student First name "
+            placeholder="Enter Email Address "
             value={username}
             onChangeText={ (v) => setUsername(v)}
             />
             <TextInput
             style={styles.textBoxes}
-            placeholder="Enter student Last Name"
+            placeholder="Enter Password"
             value={password}
             onChangeText={ (v) => setpassword(v)}
             />
@@ -33,19 +85,15 @@ export default function App({navigation})  {
             <Button
  
             title="Login"
-            onPress={() => {
-            
-                alert("login done")
-             
-            }}
+            onPress={() => {auth()}}
           />
     
-            <Button
+            {/* <Button
             
             title="AddUser"
             onPress={()=>navigation.navigate("AddUser")}
             // onPress={readData()}
-          />
+          /> */}
     
             </View>
     </View>
