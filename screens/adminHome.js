@@ -1,15 +1,69 @@
 import { Button, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React , {useEffect, useState}from 'react'
+import {AsyncStorage} from 'react-native';
 
-export default function App({navigation}) {
+export default function App({ route , navigation }) {
+
+  const name = route.params.data;
+  const uName = name;
+  const [Ptask , setPtask] = useState(JSON.parse(route.params.Pdata));
+  const loginScreen = ()=>{navigation.navigate("Login")}
+
+  useEffect(() => {
+    checkSession();
+}, []);
+
+  const checkSession = async() => {
+    var value;
+    try {
+      value = await AsyncStorage.getItem('username');
+      if (value !== null) {
+        // We have data!!
+        console.log(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+    if(value === null)
+    {
+      console.log("username is null");
+      loginScreen();
+    }
+  }
+
+
+  const logOut = async() => {
+    try {
+        await AsyncStorage.removeItem('username');
+        console.log("Logout Done");
+        loginScreen();
+        return true;
+    }
+    catch(exception) {
+      console.log("Error");
+        return false;
+    }
+}
+
+
+
   return (
       <View style = {styles.container}>
+        <Text>Hello , {name}</Text>
+        <View>
+              <Button title = "Logout"
+              onPress= {()=>logOut()}
+              >
+              </Button>
+            </View>
       <Button title="Add Project"
       onPress={()=>navigation.navigate("AddProject")}/>
       <Button title="Add User"
       onPress={()=>navigation.navigate("AddUser")}/>
-      <Button title="View Projects"/>
-      <Button title="View Users"/>
+      <Button title="View Projects"
+        onPress={()=>navigation.navigate("Projectlist" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask)})}/>
+      <Button title="View Users"
+      onPress={()=>alert(name)}/>
     </View>
   )
 }

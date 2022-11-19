@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, View , Button } from 'react-native';
+import { StyleSheet, Text, TextInput, View , Button, Alert } from 'react-native';
 import axios from "axios";
+import { AsyncStorage } from 'react-native';
 
 const baseUrl = "http://10.0.2.2:3000";
 
@@ -9,11 +10,64 @@ export default function App({navigation})  {
 
     const [username , setUsername] = useState("");
     const [password , setpassword] = useState("");
+    const [userFname , setUserFname] = useState("");
     const [data , setData] = useState("");
+    const [projectData , setProjectData] = useState([]);
+  
 
+    const getProjectList = () => {
+      
+      axios.get(`${baseUrl}/projects`)
+      .then(function(response) {
+        // alert(JSON.stringify(response.data));
+        
+        setProjectData(response.data);
+        console.log(data);
+  
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
 
+  // const checkSession = async(username) => {
+  //   try{
+  //   await AsyncStorage.getItem('username').then(value => this.setState({ getValue: value }) );
+  //     value = AsyncStorage.getItem('username').then(value => this.setState({ getValue: value }) );
+  //   }
+  //   catch(exception) {
+  //     return false;
+  // }
+  //   if(value == null)
+  //   {
+  //     ()=>navigation.navigate("login.js");
+  //   }
+
+  // }
+  const setSession = async (username) => {
+    try {
+      console.log("username is set");
+      await AsyncStorage.setItem('username',username);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // const logOut = async() => {
+  //     try {
+  //         await AsyncStorage.removeItem('username');
+  //         console.log("Logout Done")
+  //         return true;
+  //     }
+  //     catch(exception) {
+  //       console.log("Error");
+  //         return false;
+  //     }
+  // }
+  
     useEffect(() => {
       getCharacters();
+      getProjectList();
     }, []);
   
      const getCharacters = () => {
@@ -31,43 +85,42 @@ export default function App({navigation})  {
         alert(error);
       });
   }
-
-  const adminHome = ()=>{navigation.navigate("AdminHome")}
-  const userHome = ()=>{navigation.navigate("UserHome")}
+ 
+  const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData)})}
+  const userHome = ()=>{navigation.navigate("UserHome",{ data: username , Pdata: JSON.stringify(projectData) })}
   
   const auth = () => {
-  
-    for(var i =0; i<data.length; i++) {
-      if(username.toLocaleLowerCase() === data[i].email && password.toLocaleLowerCase() === data[i].password){
-        if(data[i].isAdmin == true){
+
+
+    data.forEach((element) => {
+
+      if(username.toLocaleLowerCase() === element.email && password === element.password)
+      {
+        setSession(username);
+        setUsername('');
+        setpassword('');
+        if(element.isAdmin == true){
           adminHome();
-        }
-        if(data[i].isAdmin == false)
-        {
+          // alert(' successfully login as ' + username);
+        }else{
           userHome();
+          // alert(' successfully login as ' + username);
+
         }
-        alert(' successfully login as ' + username);
-        
-        break;
       }
-      else{
-        alert('enter valid username');
-      }
-    }
+      
+  });
   
-    
   
   }
 
     return (
-            
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+           
             <View>
-    
+
               <Text style={styles.text}> Login</Text>
                         
-          
-    
             <TextInput
             style={styles.textBoxes}
             placeholder="Enter Email Address "
@@ -80,8 +133,7 @@ export default function App({navigation})  {
             value={password}
             onChangeText={ (v) => setpassword(v)}
             />
-          
-    
+        
             <Button
  
             title="Login"
@@ -154,4 +206,4 @@ export default function App({navigation})  {
 //     alignItems: 'center',
 //     justifyContent: 'center',
 //   },
-// });
+// }

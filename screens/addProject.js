@@ -1,18 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
+
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View , Button, Pressable  } from 'react-native';
+import { StyleSheet, Text, TextInput, View , Button, Pressable, SafeAreaView  } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import axios from "axios";
 
 export default function App() {
 
     const [taskName , setTaskName] = useState("");
-    const [taskDesc , setTaskDesc] = useState("");
-    const [taskAssign , setTaskAssign] = useState("");
-    const [date, setDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [taskDescription , settaskDescription] = useState("");
+    const [assignedMember , setassignedMember] = useState("");
+    const [taskRate , settaskRate] = useState("");  
+    const [taskStartDate, settaskStartDate] = useState('');
+    const [taskEndDate, settaskEndDate] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDateEndPickerVisible, setDateEndPickerVisibility] = useState(false);
+    const [isComplete, setisComplete] = useState('');
 
+    const baseUrl = "http://10.0.2.2:3000";
+    // date start
     const showDatePicker = () => {
       setDatePickerVisibility(true);
     };
@@ -22,14 +27,16 @@ export default function App() {
     };
   
     const handleConfirm = (date) => {
-      setDate(date);
+      settaskStartDate(date);
       hideDatePicker();
     };
 
     const getDate = () => {
-      let tempDate = date.toString().split(' ');
-      return date !== ''
-        ? ` ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
+      let tempDate1 = taskStartDate;
+      
+      return taskStartDate !== ''
+        ? ` ${tempDate1[1]} ${tempDate1[2]} , ${tempDate1[3]}` 
+        
         // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
         : '';
     };
@@ -43,35 +50,64 @@ export default function App() {
       setDateEndPickerVisibility(false);
     };
   
-    const handleEndConfirm = (endDate) => {
-      setEndDate(endDate);
+    const handleEndConfirm = (endDate) => {    
+      settaskEndDate(endDate);
       hideDateEndPicker();
     };
 
     const getEndDate = () => {
-      let tempDate = endDate.toString().split(' ');
-      return endDate !== ''
+      
+      let tempDate = taskEndDate;
+      return taskEndDate !== ''
         ? ` ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
         // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
         : '';
     };
 
-    const Alert = () => {
-      alert('its working!!');
-    }
+    // const Alert = () => {
+    //   alert('its working!!');
+    // }
 
+    // adding project data to database
+
+    const handleSubmitTask = async () => {
+      if (!taskName.trim() || !taskDescription.trim()) {
+        alert("Please!!.. Enter Valid Inputs");
+        return;
+      }
+      
+      try {
+        const response = await axios.post(`${baseUrl}/projects`, {
+          taskName,
+          taskDescription,
+          assignedMember,
+          taskRate,
+          taskStartDate,
+          taskEndDate,
+        });
+        if (response.status === 200) {
+          alert(` You have created: ${JSON.stringify(response.data)}`);
+          setTaskName('');
+          settaskDescription('');
+          setassignedMember('');
+          settaskRate('');
+          settaskStartDate('');
+          settaskEndDate('');
+        } else {
+          throw new Error("An error has occurred");
+        }
+      } catch (error) {
+        alert("An error has occurred");
+      }
+    };
   
   
     return (
-            
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        
-    
-              <Text style={styles.text}> Add Task</Text>
-                        
-          
-    
-            <TextInput
+      
+        <SafeAreaView>
+        <View style={{ alignItems: 'center', justifyContent: 'center' , marginTop:100 }}>
+              <View>
+              <TextInput
             style={styles.textBoxes}
             placeholder=" Task Name.... "
             value={taskName}
@@ -80,41 +116,56 @@ export default function App() {
             <TextInput
             style={styles.textBoxes}
             placeholder="Task Description...."
-            value={taskDesc}
-            onChangeText={ (v) => setTaskDesc(v)}
+            value={taskDescription}
+            onChangeText={ (v) => settaskDescription(v)}
             />
 
             <TextInput
             style={styles.textBoxes}
             placeholder="Task Assign To...."
-            value={taskAssign}
-            onChangeText={ (v) => setTaskAssign(v)}
+            value={assignedMember}
+            onChangeText={ (v) => setassignedMember(v)}
             />
 
+            <TextInput
+            style={styles.textBoxes}
+            placeholder=" Add Hourly Rate...."
+            value={taskRate}
+            onChangeText={ (v) => settaskRate(v)}
+            />
+                  </View>
+            
 
-          
-        
-          
-         <Button title='set start Data'
-         onPress={showDatePicker}
-         />
+            <View style={styles.dateBox} >
+        <Pressable  onPress={showDatePicker}>
+              <Text style={styles.DateTextshow} >Start Date</Text>
+        </Pressable>
+        {/* <Button title='set End Data'
+         onPress={showDateEndPicker}
+         /> */}
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
-          <TextInput
-            style={styles.textBoxes}
+            <TextInput
+            style={styles.DateTextInput}
             value={getDate()}
             placeholder="Start Date..."
           />
+          </View>
+
+      
 
 
-
-<Button title='set start Data'
+        <View style={styles.dateBox1} >
+        <Pressable  onPress={showDateEndPicker}>
+              <Text style={styles.DateTextshow} >End Date</Text>
+        </Pressable>
+        {/* <Button title='set End Data'
          onPress={showDateEndPicker}
-         />
+         /> */}
           <DateTimePickerModal
             isVisible={isDateEndPickerVisible}
             mode="date"
@@ -122,23 +173,28 @@ export default function App() {
             onCancel={hideDateEndPicker}
           />
           <TextInput
-            style={styles.textBoxes}
+            style={styles.DateTextInput}
             value={getEndDate()}
-            placeholder="Start Date..."
+            placeholder="End Date..."
           />
+         </View>
+         <View>
+          <Pressable onPress={()=> handleSubmitTask()}>
+            <Text style={styles.submit}>SUBMIT TASK</Text>
+          </Pressable>
+         </View>
+
 
       
-     
-      {/* <Text>{endDate.toString()}</Text> */}
-            
-          <Button
-              title="submit Task"
-              onPress={() => {alert("task submitted done") }}
-              />
+           
+
+       </View>  
         
-            
-         
-    </View>
+
+    
+    
+
+    </SafeAreaView>
    
     ); 
 };
@@ -155,7 +211,7 @@ export default function App() {
         fontSize: 18,
         padding: 12,
         borderColor: 'gray', 
-        borderWidth: 0.2,
+        borderWidth: 0.5,
         borderRadius: 10,
         marginBottom:10,
         marginLeft:10,
@@ -179,5 +235,69 @@ export default function App() {
           textAlign:'right',
           
         },
-       
+        submitText:{
+          color:'white',
+          textAlign:'center',
+          fontSize:15,
+          fontWeight:'600'
+        },
+        dateText:{
+          width:500,
+         
+          color:'red',
+          textAlign:'right',
+         
+        },
+        
+        dateBox:{
+          width:'75%',
+          backgroundColor:'yellow',
+          flex:1,
+          flexDirection:'row-reverse',
+          
+
+        },
+        dateBox1:{
+          width:'75%',
+          backgroundColor:'yellow',
+          flex:1,
+          flexDirection:'row-reverse',
+          marginTop:60,
+
+        },
+        DateTextInput:{
+            width:200,
+            height:50,
+            borderWidth: 0.5,
+            borderRadius: 10,
+            fontSize: 18,
+            padding: 12,
+            borderColor: 'gray',
+            marginLeft:100,
+          },
+          DateTextshow:{
+            width:100,
+            height:50,
+            borderWidth: 0.5,
+            borderRadius: 10,
+            textAlign:'center',
+            fontSize: 16,
+            padding: 15,
+            borderColor: 'gray',
+            marginLeft:5,
+            fontWeight:'500',
+          },
+          submit:{
+            
+            marginTop:60,
+            borderRadius:10,
+            borderWidth:0.5,
+            height:40,
+            width:150,
+            fontSize:20,
+            textAlign:'center',
+            paddingTop:7,
+            fontWeight:'600',
+
+          },
         });

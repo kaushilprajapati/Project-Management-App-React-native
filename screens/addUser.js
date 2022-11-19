@@ -8,6 +8,7 @@ import {
   Button,
   Platform,
   TextInput,
+  Pressable,
 } from "react-native";
 import Constants from "expo-constants";
 
@@ -45,7 +46,7 @@ export default function App() {
 
   const onSubmitFormHandler = async (event) => {
     if (!firstName.trim() || !email.trim()) {
-      alert("Name or Email is invalid");
+      alert("Please!!.. Enter Valid Inputs");
       return;
     }
     setIsLoading(true);
@@ -81,9 +82,9 @@ export default function App() {
       <View>
         <View style={styles.wrapper}>
           {isLoading ? (
-            <Text style={styles.formHeading}> Creating resource </Text>
+            <Text style={styles.formHeading}> CREATING RESOURSES </Text>
           ) : (
-            <Text style={styles.formHeading}>Create new user</Text>
+            <Text style={styles.formHeading}>CREATE NEW USER</Text>
           )}
         </View>
         <View style={styles.wrapper}>
@@ -139,12 +140,15 @@ export default function App() {
           />
         </View>
         <View>
-          <Button
+          <Pressable style={styles.submitinput} onPress={onSubmitFormHandler}>
+              <Text style={styles.submitText}>SUBMIT</Text>
+          </Pressable>
+          {/* <Button
             title="Submit"
             onPress={onSubmitFormHandler}
             style={styles.submitButton}
             disabled={isLoading}
-          />
+          /> */}
         </View>
       </View>
     </ScrollView>
@@ -160,22 +164,46 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
   },
   formHeading: {
+    
     color: "#ffffff",
+    fontSize:25,
+    fontWeight:'500',
+    textAlign:'center',
   },
   wrapper: {
     marginBottom: 10,
   },
-  input: {
-    borderWidth: 2,
-    borderColor: "grey",
-    minWidth: 200,
-    textAlignVertical: "center",
-    paddingLeft: 10,
-    borderRadius: 20,
-    color: "#ffffff",
-  },
+  input:  {
+    width: 300, 
+    fontSize: 18,
+    padding: 12,
+    borderColor: 'gray', 
+    borderWidth: 0.2,
+    borderRadius: 10,
+    marginBottom:10,
+    marginLeft:10,
+    
+    },
   submitButton: {
     backgroundColor: "gray",
     padding: 100,
+  },
+
+  submitinput:{
+    width: 300, 
+    fontSize: 18,
+    padding: 12,
+    borderColor: 'gray', 
+    borderWidth: 0.2,
+    borderRadius: 10,
+    marginBottom:10,
+    marginLeft:10,
+    backgroundColor:'white',
+  },
+
+  submitText:{
+    textAlign:'center',
+    fontSize:15,
+    fontWeight:'600'
   },
 });

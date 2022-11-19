@@ -1,3 +1,4 @@
+
 import React , {useState , useEffect} from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
 import axios from "axios";
@@ -5,56 +6,50 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 export default function Projectlist({ route , navigation }) {
 
-  const name = route.params.data;
-
-  const [Ptask , setPtask] = useState(JSON.parse(route.params.Pdata));
-
-    const [data , setData] = useState([]);
+    const [name , setName] = useState(JSON.parse(route.params.a));
+    const [data , setData] =  useState(JSON.parse(route.params.PData));
     const [assignTask , setAssignTask] = useState([]);
     
 
-
     useEffect(() => {
-        // getProjectList();
+        
         projectDetails();
        
     }, []);
   
-  //    const getProjectList = () => {
+//      const getProjectList = () => {
       
-  //     axios.get('http://localhost:3000/projects')
-  //     .then(function(response) {
-  //       // alert(JSON.stringify(response.data));
+//       axios.get('http://localhost:3000/projects')
+//       .then(function(response) {
+//         // alert(JSON.stringify(response.data));
         
-  //       setData(response.data);
+//         setData(response.data);
        
   
-  //       // console.log(data);
+//         console.log(data);
   
-  //     })
-  //     .catch(error => {
-  //       alert(error);
-  //     });
-
-  // }
+//       })
+//       .catch(error => {
+//         alert(error);
+//       });
+//   }
 
   const projectDetails = () =>{
-    
-    
-    var a = [];
-     Ptask.forEach((element) => {
-         
-         console.log(element.assignedMember);
-        if(element.assignedMember == name){
-             a.push(element);
-             console.log(a);
-            }
-    setAssignTask(a);
-   
-    });
+   var a = [];
+    data.forEach((element) => {
+        
+        console.log(element.assignedMember);
+       if(element.assignedMember == name){
+            a.push(element);
+            console.log(a);
 
-    console.log(Ptask);
- }
+       }
+        
+       setAssignTask(a);
+   
+  });
+}
+
 
 const itemSeparator = () => {
     return <View style = {styles.separator} />
