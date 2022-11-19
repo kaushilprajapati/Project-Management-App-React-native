@@ -6,7 +6,11 @@ const projectSchema = mongoose.Schema({
     taskStartDate: String,
     taskEndDate: String,
     assignedMember: String,
-    taskRate: String
+    taskRate: String,
+    taskStatus: String,
+    isComplete: Boolean,
+    totalHours: String,
+    totalAmount: String 
 })
 
 

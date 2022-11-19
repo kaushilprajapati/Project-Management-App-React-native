@@ -47,7 +47,11 @@ router.post('/', async(req,res) => {
     taskStartDate: req.body.taskStartDate,
     taskEndDate: req.body.taskEndDate,
     assignedMember:req.body.assignedMember,
-    taskRate: req.body.taskRate
+    taskRate: req.body.taskRate,
+    taskStatus: req.body.taskStatus,
+    isComplete: req.body.isComplete,
+    totalHours: req.body.totalHours,
+    totalAmount: req.body.totalAmount
     }) 
     project = await project.save();
 
@@ -100,7 +104,11 @@ router.put('/:id', async(req,res) => {
             taskStartDate: req.body.taskStartDate,
             taskEndDate: req.body.taskEndDate,
             assignedMember:req.body.assignedMember,
-            taskRate: req.body.taskRate
+            taskRate: req.body.taskRate,
+            taskStatus: req.body.taskStatus,
+            isComplete: req.body.isComplete,
+            totalHours: req.body.totalHours,
+            totalAmount: req.body.totalAmount
         };
  
     const projectList = await Project.findByIdAndUpdate(req.params.id, {$set:project}, {new: true});
