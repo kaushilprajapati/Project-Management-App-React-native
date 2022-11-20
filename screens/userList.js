@@ -1,76 +1,12 @@
-
 import React , {useState , useEffect} from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
-import axios from "axios";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 export default function Projectlist({ route , navigation }) {
 
-    const [name , setName] = useState(JSON.parse(route.params.a));
-    const [data , setData] =  useState(JSON.parse(route.params.PData));
-    const [assignTask , setAssignTask] = useState([]);
-    // const [projectData , setProjectData] = useState([]);
-  
     
-    const baseUrl = "http://10.0.2.2:3000";
-  
-
-    //1 time page
-    //2nd time page
-    useEffect(() => {
-        projectDetails();
-        getProjectList();
-    }, []);
-  
-//      const getProjectList = () => {
-      
-//       axios.get('http://localhost:3000/projects')
-//       .then(function(response) {
-//         // alert(JSON.stringify(response.data));
-        
-//         setData(response.data);
-       
-  
-//         console.log(data);
-  
-//       })
-//       .catch(error => {
-//         alert(error);
-//       });
-//   }
-
-  const projectDetails = () =>{
-   var a = [];
-    data.forEach((element) => {
-        
-        console.log(element.assignedMember);
-       if(element.assignedMember == name){
-            a.push(element);
-            console.log(a);
-      
-       }
-        
-       setAssignTask(a);
+    const [users , setUsers]  = useState(JSON.parse(route.params.alluser));
    
-  });
-}
-
-const getProjectList = () => {
-      
-  axios.get(`${baseUrl}/projects`)
-  .then(function(response) {
-    // alert(JSON.stringify(response.data));
-    
-    // setProjectData(response.data);
-    setData(response.data);
-    console.log(data);
-
-  })
-  .catch(error => {
-    alert(error);
-  });
-}
-
 
 
 
@@ -85,17 +21,16 @@ const itemSeparator = () => {
          
     <SafeAreaView>
         
-        {/* <Button title='get Data'
-        onPress={()=>projectDetails()}/> */}
+       
   
     <ScrollView style={styles.scrollView}>
     
     <FlatList
-    data = {assignTask}
+    data = {users}
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (
-        <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:JSON.stringify(item)})} >
+        <TouchableOpacity onPress= {()=>alert(" I am working on User update Data.")} >
         
           <Swipeable renderLeftActions={() => 
         
@@ -112,7 +47,8 @@ const itemSeparator = () => {
                 <View style={styles.avatarContainer} >
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />
                 </View>
-                <Text style={styles.itemname}>{item.taskName}</Text>
+                <Text style={styles.itemname}>{item.firstName}</Text>
+                <Text style={styles.itemname}> , Job Title : {item.jobTitle}</Text>
             </View>
           </Swipeable>
         </TouchableOpacity>
@@ -206,4 +142,4 @@ const styles = StyleSheet.create({
       height:40,
     },
   
-  });
+  })

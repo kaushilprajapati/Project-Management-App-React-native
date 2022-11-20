@@ -288,7 +288,6 @@ export default function App() {
             fontWeight:'500',
           },
           submit:{
-            
             marginTop:60,
             borderRadius:10,
             borderWidth:0.5,
@@ -298,6 +297,5 @@ export default function App() {
             textAlign:'center',
             paddingTop:7,
             fontWeight:'600',
-
           },
         });

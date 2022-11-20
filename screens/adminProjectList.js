@@ -7,19 +7,21 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 export default function Projectlist({ route , navigation }) {
 
     const [name , setName] = useState(JSON.parse(route.params.a));
-    const [data , setData] =  useState(JSON.parse(route.params.PData));
+
+    const [data , setData] =  useState([]);
     const [assignTask , setAssignTask] = useState([]);
     // const [projectData , setProjectData] = useState([]);
-  
+    const [id, setId] = useState(data._id);
     
     const baseUrl = "http://10.0.2.2:3000";
-  
+
 
     //1 time page
     //2nd time page
     useEffect(() => {
-        projectDetails();
+       
         getProjectList();
+        projectDetails();
     }, []);
   
 //      const getProjectList = () => {
@@ -42,18 +44,44 @@ export default function Projectlist({ route , navigation }) {
   const projectDetails = () =>{
    var a = [];
     data.forEach((element) => {
-        
+            // alert(data[0]._id);
         console.log(element.assignedMember);
        if(element.assignedMember == name){
             a.push(element);
             console.log(a);
-      
+
        }
+
+      
         
        setAssignTask(a);
    
   });
 }
+
+const funcDelete = (id) => {
+    alert(id);
+}
+
+const handleDelete= async (id) => {
+    try{
+   const response = await axios.delete(`${baseUrl}/projects/${id}`);
+   if (response.status === 200) {
+    alert(` You have deleted: ${JSON.stringify(response.data)}`);
+    console.log(id);
+    console.log(response.data);
+    settotalHours(totalHours);
+    isComplete(true);
+    } else {
+    throw new Error("An error has occurred adding data");
+  }
+}
+    catch(e) {
+        console.log(e);
+    }
+  }
+  
+  
 
 const getProjectList = () => {
       
@@ -70,8 +98,6 @@ const getProjectList = () => {
     alert(error);
   });
 }
-
-
 
 
 const itemSeparator = () => {
@@ -91,7 +117,7 @@ const itemSeparator = () => {
     <ScrollView style={styles.scrollView}>
     
     <FlatList
-    data = {assignTask}
+    data = {data}
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (
@@ -99,7 +125,7 @@ const itemSeparator = () => {
         
           <Swipeable renderLeftActions={() => 
         
-          <TouchableOpacity onPress={ () => handleDelete(index)} >
+          <TouchableOpacity onPress={ () => handleDelete(item._id)} >
             <View style={styles.deletebox}>
               <Text style={styles.delete}>Delete</Text>
             </View>

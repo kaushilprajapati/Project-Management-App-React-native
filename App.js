@@ -9,7 +9,8 @@ import AddProject from './screens/addProject';
 import UserHome from './screens/userHome';
 import Projectlist from './screens/Projectlist';
 import ProjectInfo from './screens/projectInfo';
-
+import adminProjectList from './screens/adminProjectList';
+import userList from './screens/userList';
 
 const Stack = createStackNavigator();
 
@@ -23,7 +24,9 @@ export default function MyStack() {
       <Stack.Screen name = "UserHome" component={UserHome}/>
       <Stack.Screen name="AddProject" component={AddProject}/>
       <Stack.Screen name="Projectlist" component={Projectlist}/>
+      <Stack.Screen name="adminProjectList" component={adminProjectList}/>
       <Stack.Screen name='ProjectInfo' component={ProjectInfo}/>
+      <Stack.Screen name='userList' component={userList}/>
     </Stack.Navigator>
     </NavigationContainer>
   );

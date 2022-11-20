@@ -86,8 +86,9 @@ export default function App({navigation})  {
       });
   }
  
-  const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData)})}
-  const userHome = ()=>{navigation.navigate("UserHome",{ data: username , Pdata: JSON.stringify(projectData) })}
+  const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData),  Udata: JSON.stringify(data)})}
+  const userHome = ()=>{navigation.navigate("UserHome",{ data: username,Pdata: JSON.stringify(projectData) })}
+   
   
   const auth = () => {
 

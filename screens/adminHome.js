@@ -8,10 +8,13 @@ export default function App({ route , navigation }) {
   const uName = name;
   const [Ptask , setPtask] = useState(JSON.parse(route.params.Pdata));
   const loginScreen = ()=>{navigation.navigate("Login")}
-
+  const [UserData , setUserData] = useState(JSON.parse(route.params.Udata));
+  
   useEffect(() => {
     checkSession();
+
 }, []);
+
 
   const checkSession = async() => {
     var value;
@@ -61,9 +64,9 @@ export default function App({ route , navigation }) {
       <Button title="Add User"
       onPress={()=>navigation.navigate("AddUser")}/>
       <Button title="View Projects"
-        onPress={()=>navigation.navigate("Projectlist" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask)})}/>
+        onPress={()=>navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask)})}/>
       <Button title="View Users"
-      onPress={()=>alert(name)}/>
+      onPress={()=>navigation.navigate("userList" , {alluser: JSON.stringify(UserData)})}/>
     </View>
   )
 }

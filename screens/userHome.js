@@ -77,7 +77,7 @@ const itemSeparator = () => {
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (
-        <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:item})} >
+        <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:JSON.stringify(item)})} >
         
           <Swipeable renderLeftActions={() => 
         
