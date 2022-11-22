@@ -3,12 +3,12 @@ require("dotenv").config({ path: "./config/.env" });
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const cors = require('cors');
+// const cors = require('cors');
 const app = express();
-const employeeRoutes = require('./routes/routes.js');
+// const employeeRoutes = require('./routes/routes.js');
 const userRoutes = require('./routes/userRoutes.js');
 const projectRoutes = require('./routes/projectRoutes.js');
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.json());
 
 
@@ -18,7 +18,7 @@ mongoose.connect(process.env.CONNECTION_STRING,{
     dbName: 'projectManagement'
 }).then(()=>{
     console.log('Database Connection is ready...')
-    app.use('/employees',employeeRoutes);
+    // app.use('/employees',employeeRoutes);
     app.use('/users', userRoutes);
     app.use('/projects', projectRoutes);
     app.listen(3000, ()=>{
