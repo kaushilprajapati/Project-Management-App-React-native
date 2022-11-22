@@ -16,7 +16,7 @@ export default function ProjectInfo({route}) {
     const [taskStartDate, settaskStartDate] = useState(details.taskStartDate);
     const [taskEndDate, settaskEndDate] = useState(details.taskEndDate);
     const [isComplete, setisComplete] = useState(false);
-    const [taskStatus , setTaskStatus] = useState('running')
+    const [taskStatus , setTaskStatus] = useState(details.taskStatus);
     const [totalHours , settotalHours] = useState(details.totalHours);
     const[totalAmount, settotalAmount] = useState('');
 
@@ -24,7 +24,7 @@ export default function ProjectInfo({route}) {
 
     useEffect(() => {
       getProjectList();
-  }, []);
+  });
 
   const getProjectList = () => {
       
@@ -35,7 +35,7 @@ export default function ProjectInfo({route}) {
       setDetails(response.data);
       // details = response.data;
       // alert(JSON.stringify(response.data));
-       console.log(details);
+      //  console.log(details);
       //  alert(details.taskName);
     })
     .catch(error => {
@@ -58,8 +58,9 @@ export default function ProjectInfo({route}) {
    const handleUpdateTask = async (event) => {
     totalamount();
     if (!totalHours) {
-      alert(id);
-      console.log(id);
+      // alert(id);
+      // console.log(id);
+      alert("Please enter the total hours");
       return;
     }
     
@@ -79,10 +80,11 @@ export default function ProjectInfo({route}) {
       });
       if (response.status === 200) {
         alert(` You have updted: ${JSON.stringify(response.data)}`);
-        console.log(id);
-        console.log(response.data);
+        // console.log(id);
+        // console.log(response.data);
         settotalHours(totalHours);
         isComplete(true);
+        getProjectList();
         } else {
         throw new Error("An error has occurred adding data");
       }
@@ -105,7 +107,7 @@ return (
                     <Text style={styles.textBoxes} >{assignedMember}</Text>
                     <Text style={styles.textBoxes} >Start Date :{taskStartDate}</Text>
                     <Text style={styles.textBoxes} >End Date :{taskEndDate}</Text>
-                    <Text style={styles.textBoxes} >Task Status : Running </Text>
+                    <TextInput placeholder="Task Status?" style={styles.textBoxes} value = {taskStatus} onChangeText={(v) => setTaskStatus(v)}/> 
                     <TextInput
                         style={styles.textBoxes}
                         placeholder="Hours You Worked On"

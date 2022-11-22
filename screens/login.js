@@ -3,17 +3,20 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, View , Button, Alert } from 'react-native';
 import axios from "axios";
 import { AsyncStorage } from 'react-native';
+import { LogBox } from 'react-native';
 
 const baseUrl = "http://10.0.2.2:3000";
+
+LogBox.ignoreAllLogs();
 
 export default function App({navigation})  {
 
     const [username , setUsername] = useState("");
     const [password , setpassword] = useState("");
     const [userFname , setUserFname] = useState("");
-    const [data , setData] = useState("");
+    const [data , setData] = useState([]);
     const [projectData , setProjectData] = useState([]);
-  
+    var inValid = false;
 
     const getProjectList = () => {
       
@@ -22,7 +25,7 @@ export default function App({navigation})  {
         // alert(JSON.stringify(response.data));
         
         setProjectData(response.data);
-        console.log(data);
+        // console.log(data);
   
       })
       .catch(error => {
@@ -67,9 +70,10 @@ export default function App({navigation})  {
   
     useEffect(() => {
       getCharacters();
-      getProjectList();
-    }, []);
+       getProjectList();
+    },[]);
   
+
      const getCharacters = () => {
       
       axios.get(`${baseUrl}/users`)
@@ -78,7 +82,7 @@ export default function App({navigation})  {
         
         setData(response.data);
   
-        console.log(data);
+        // console.log(data);
   
       })
       .catch(error => {
@@ -90,33 +94,74 @@ export default function App({navigation})  {
   const userHome = ()=>{navigation.navigate("UserHome",{ data: username,Pdata: JSON.stringify(projectData) })}
    
   
-  const auth = () => {
+//   const auth = async () => {
+//     try{
+//     const gg = await data.forEach((element) => {
 
+//       if(username.toLocaleLowerCase() === element.email && password === element.password)
+//       {
+//         inValid = false;
+//         setSession(username);
+//         setUsername('');
+//         setpassword('');
+//         if(element.isAdmin == true){
+//           adminHome();
+//           // alert(' successfully login as ' + username);
+//         }else{
+//           userHome();
+//           // alert(' successfully login as ' + username);
 
-    data.forEach((element) => {
+//         }
+//       }
 
-      if(username.toLocaleLowerCase() === element.email && password === element.password)
-      {
-        setSession(username);
-        setUsername('');
-        setpassword('');
-        if(element.isAdmin == true){
-          adminHome();
-          // alert(' successfully login as ' + username);
-        }else{
-          userHome();
-          // alert(' successfully login as ' + username);
-
-        }
-      }
+//       else{
+//         console.log('no data found');
+//         inValid = true;
+//       }
       
-  });
+//   });
+
+// }
+// catch (e) {
+//   console.log(e);
+// }
   
-  
+//   // if(inValid == true) {
+//   //   alert('Incorrect credentials');
+//   // }
+//   }
+
+const auth = () => {
+  for(var i =0; i<data.length; i++) {
+    if(username === data[i].email && password === data[i].password){
+
+     setUsername("");
+     setpassword("");
+      inValid = false;
+      if(data[i].isAdmin == true){
+        adminHome();
+      }
+      if(data[i].isAdmin == false)
+      {
+        userHome();
+      }
+      alert(' successfully login as ' + username);
+
+      break;
+    }
+    else{
+      inValid = true;
+    }
   }
 
+  if(inValid == true){
+    alert('Incorrect credentials');
+  }
+
+}
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor : "#D8E2DC" }}>
            
             <View>
 

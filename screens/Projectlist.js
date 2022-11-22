@@ -19,8 +19,8 @@ export default function Projectlist({ route , navigation }) {
     //2nd time page
     useEffect(() => {
         projectDetails();
-        getProjectList();
-    }, []);
+        //getProjectList();
+    },[]);
   
 //      const getProjectList = () => {
       
@@ -39,37 +39,57 @@ export default function Projectlist({ route , navigation }) {
 //       });
 //   }
 
-  const projectDetails = () =>{
-   var a = [];
-    data.forEach((element) => {
-        
-        console.log(element.assignedMember);
-       if(element.assignedMember == name){
-            a.push(element);
-            console.log(a);
-      
-       }
-        
-       setAssignTask(a);
+//   const projectDetails = async() =>{
+//    var a = [];
+//     const gg = await data.forEach((element) => {
+//         console.log(element.assignedMember);
+//        if(element.assignedMember == name){
+//             a.push(element);
+//            // console.log(a);
+//        }
+//        setAssignTask(a);
    
-  });
-}
+//   });
+// }
 
-const getProjectList = () => {
+const projectDetails = () =>{
+     var a = [];
+      data.forEach((element) => {
+              // alert(data[0]._id);
+          console.log(element.assignedMember);
+         if(element.assignedMember == name){
+              a.push(element);
+              console.log(a);
+  
+         }
+  
+        
+          
+         setAssignTask(a);
+     
+    });
+  }
+
+
+
+
+
+
+// const getProjectList = () => {
       
-  axios.get(`${baseUrl}/projects`)
-  .then(function(response) {
-    // alert(JSON.stringify(response.data));
+//   axios.get(`${baseUrl}/projects`)
+//   .then(function(response) {
+//     // alert(JSON.stringify(response.data));
     
-    // setProjectData(response.data);
-    setData(response.data);
-    console.log(data);
+//     // setProjectData(response.data);
+//     setData(response.data);
+//     // console.log(data);
 
-  })
-  .catch(error => {
-    alert(error);
-  });
-}
+//   })
+//   .catch(error => {
+//     alert(error);
+//   });
+// }
 
 
 

@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     marginBottom: 10,
+    color:"#ffffff",
   },
   input:  {
     width: 300, 
@@ -182,6 +183,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom:10,
     marginLeft:10,
+    color: "#ffffff",
     
     },
   submitButton: {

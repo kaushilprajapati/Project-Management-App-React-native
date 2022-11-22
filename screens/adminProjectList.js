@@ -1,5 +1,5 @@
 
-import React , {useState , useEffect} from 'react';
+import React , {useState , useEffect, Component} from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
 import axios from "axios";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -21,8 +21,10 @@ export default function Projectlist({ route , navigation }) {
     useEffect(() => {
        
         getProjectList();
-        projectDetails();
-    }, []);
+        // projectDetails();
+    });
+
+  
   
 //      const getProjectList = () => {
       
@@ -41,23 +43,23 @@ export default function Projectlist({ route , navigation }) {
 //       });
 //   }
 
-  const projectDetails = () =>{
-   var a = [];
-    data.forEach((element) => {
-            // alert(data[0]._id);
-        console.log(element.assignedMember);
-       if(element.assignedMember == name){
-            a.push(element);
-            console.log(a);
+//   const projectDetails = () =>{
+//    var a = [];
+//     data.forEach((element) => {
+//             // alert(data[0]._id);
+//         console.log(element.assignedMember);
+//        if(element.assignedMember == name){
+//             a.push(element);
+//             console.log(a);
 
-       }
+//        }
 
       
         
-       setAssignTask(a);
+//        setAssignTask(a);
    
-  });
-}
+//   });
+// }
 
 const funcDelete = (id) => {
     alert(id);
@@ -67,11 +69,8 @@ const handleDelete= async (id) => {
     try{
    const response = await axios.delete(`${baseUrl}/projects/${id}`);
    if (response.status === 200) {
-    alert(` You have deleted: ${JSON.stringify(response.data)}`);
-    console.log(id);
-    console.log(response.data);
-    settotalHours(totalHours);
-    isComplete(true);
+    alert(` You have deleted: ${JSON.stringify(response.data)}`);    
+    getProjectList();
     } else {
     throw new Error("An error has occurred adding data");
   }
@@ -105,8 +104,6 @@ const itemSeparator = () => {
    }
 
 
-
-
   return (
          
     <SafeAreaView>
@@ -131,8 +128,6 @@ const itemSeparator = () => {
             </View>
           </TouchableOpacity>
         } >
-
-         
 
             <View style={styles.item}>
                 <View style={styles.avatarContainer} >
@@ -197,7 +192,6 @@ const styles = StyleSheet.create({
         alignItems:"center",
         width:100,
         height:120,
-        
     },
 
     delete:{

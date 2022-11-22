@@ -11,29 +11,28 @@ export default function App({ route , navigation }) {
   const [UserData , setUserData] = useState(JSON.parse(route.params.Udata));
   
   useEffect(() => {
-    checkSession();
-
+    // checkSession();
+    
 }, []);
 
 
-  const checkSession = async() => {
-    var value;
-    try {
-      value = await AsyncStorage.getItem('username');
-      if (value !== null) {
-        // We have data!!
-        console.log(value);
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-    if(value === null)
-    {
-      console.log("username is null");
-      loginScreen();
-    }
-  }
-
+  // const checkSession = async() => {
+  //   var value;
+  //   try {
+  //     value = await AsyncStorage.getItem('username');
+  //     if (value !== null) {
+  //       // We have data!!
+  //       console.log(value);
+  //     }
+  //   } catch (error) {
+  //     // Error retrieving data
+  //   }
+  //   if(value === null)
+  //   {
+  //     console.log("username is null");
+  //     loginScreen();
+  //   }
+  // }
 
   const logOut = async() => {
     try {
@@ -48,17 +47,16 @@ export default function App({ route , navigation }) {
     }
 }
 
-
-
   return (
       <View style = {styles.container}>
-        <Text>Hello , {name}</Text>
-        <View>
+         <View style={{marginTop : 0, marginLeft: 280, marginBottom: 230}}>
               <Button title = "Logout"
               onPress= {()=>logOut()}
               >
               </Button>
             </View>
+        <Text>Hello , {name}</Text>
+       
       <Button title="Add Project"
       onPress={()=>navigation.navigate("AddProject")}/>
       <Button title="Add User"
@@ -74,8 +72,8 @@ export default function App({ route , navigation }) {
 const styles = StyleSheet.create({
   container: {  
     flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom:270
     },
 })

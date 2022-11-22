@@ -27,18 +27,19 @@ export default function App() {
     };
   
     const handleConfirm = (date) => {
-      settaskStartDate(date);
+      settaskStartDate(date.toString());
       hideDatePicker();
     };
 
     const getDate = () => {
-      let tempDate1 = taskStartDate;
+      // let tempDate1 = taskStartDate;
       
-      return taskStartDate !== ''
-        ? ` ${tempDate1[1]} ${tempDate1[2]} , ${tempDate1[3]}` 
+      // return taskStartDate !== ''
+      //   ? ` ${tempDate1[1]} ${tempDate1[2]} , ${tempDate1[3]}` 
         
-        // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-        : '';
+      //   // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
+      //   : '';
+      return taskStartDate.toString();
     };
 
     // date end 
@@ -51,17 +52,18 @@ export default function App() {
     };
   
     const handleEndConfirm = (endDate) => {    
-      settaskEndDate(endDate);
+      settaskEndDate(endDate.toString());
       hideDateEndPicker();
     };
 
     const getEndDate = () => {
       
-      let tempDate = taskEndDate;
-      return taskEndDate !== ''
-        ? ` ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-        // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-        : '';
+      // let tempDate = taskEndDate;
+      // return taskEndDate !== ''
+      //   ? ` ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
+      //   // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
+      //   : '';
+      return taskEndDate.toString();
     };
 
     // const Alert = () => {
@@ -149,11 +151,10 @@ export default function App() {
             onConfirm={handleConfirm}
             onCancel={hideDatePicker}
           />
-            <TextInput
+            <Text
             style={styles.DateTextInput}
-            value={getDate()}
-            placeholder="Start Date..."
-          />
+            
+          > {getDate()}</Text>
           </View>
 
       
@@ -172,11 +173,9 @@ export default function App() {
             onConfirm={handleEndConfirm}
             onCancel={hideDateEndPicker}
           />
-          <TextInput
+          <Text
             style={styles.DateTextInput}
-            value={getEndDate()}
-            placeholder="End Date..."
-          />
+          >{getEndDate()}</Text>
          </View>
          <View>
           <Pressable onPress={()=> handleSubmitTask()}>

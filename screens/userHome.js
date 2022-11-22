@@ -12,13 +12,13 @@ export default function Projectlist({ route , navigation }) {
     const [data , setData] = useState([]);
     const [assignTask , setAssignTask] = useState([]);
     
-
+    const loginScreen = ()=>{navigation.navigate("Login")}
 
     useEffect(() => {
         // getProjectList();
         projectDetails();
        
-    }, []);
+    },[]);
   
   //    const getProjectList = () => {
       
@@ -40,21 +40,34 @@ export default function Projectlist({ route , navigation }) {
 
   const projectDetails = () =>{
     
-    
     var a = [];
      Ptask.forEach((element) => {
          
-         console.log(element.assignedMember);
+        //  console.log(element.assignedMember);
         if(element.assignedMember == name){
              a.push(element);
-             console.log(a);
+            //  console.log(a);
             }
     setAssignTask(a);
    
     });
 
-    console.log(Ptask);
+    // console.log(Ptask);
  }
+
+ 
+ const logOut = () => {
+  // try {
+  //     await AsyncStorage.removeItem('username');
+  //     console.log("Logout Done");
+      loginScreen();
+      // return true;
+  // }
+  // catch(exception) {
+  //   console.log("Error");
+  //     return false;
+  // }
+}
 
 const itemSeparator = () => {
     return <View style = {styles.separator} />
@@ -64,14 +77,15 @@ const itemSeparator = () => {
 
 
   return (
-         
-    <SafeAreaView>
         
-        {/* <Button title='get Data'
-        onPress={()=>projectDetails()}/> */}
-  
+    <SafeAreaView>
     <ScrollView style={styles.scrollView}>
-    
+    <View style={{marginTop : 0, marginLeft: 280, marginBottom: 10}}>
+              <Button title = "Logout"
+              onPress= {()=>logOut()}
+              >
+              </Button>
+            </View>
     <FlatList
     data = {assignTask}
     ItemSeparatorComponent = { itemSeparator }
