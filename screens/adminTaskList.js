@@ -19,7 +19,7 @@ export default function Projectlist({ route , navigation }) {
     //1 time page
     //2nd time page
     useEffect(() => {
-        getProjectList();
+         getProjectList();
         // taskDetails();
     },[]);
   
@@ -30,7 +30,7 @@ export default function Projectlist({ route , navigation }) {
         // alert(JSON.stringify(response.data));
         
         setTaskData(response.data);
-        console.log(taskData);
+        // console.log(taskData);
   
       })
       .catch(error => {

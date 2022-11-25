@@ -9,6 +9,7 @@ export default function App({ route , navigation }) {
   const [Ptask , setPtask] = useState(JSON.parse(route.params.Pdata));
   const loginScreen = ()=>{navigation.navigate("Login")}
   const [UserData , setUserData] = useState(JSON.parse(route.params.Udata));
+  const [projectArray , setProjectArray] = useState(JSON.parse(route.params.projectData));
   
   useEffect(() => {
     // checkSession();
@@ -66,14 +67,27 @@ export default function App({ route , navigation }) {
               </Pressable>
                
         </View>
+
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/addproject.gif')} />
-              <Pressable onPress={()=>navigation.navigate("AddProject", {UData: JSON.stringify(UserData)})}>
+              <Pressable onPress={()=>navigation.navigate("addNewProject")}>
               <Text style={styles.itemname}>ADDPROJECT</Text>
               </Pressable>
                
         </View>
+
+
+
+        <View style={styles.item}>
+              
+              <Image style={styles.imagestyle} source = {require('../assets/addproject.gif')} />
+              <Pressable onPress={()=>navigation.navigate("AddProject", {UData: JSON.stringify(UserData), projectData: JSON.stringify(projectArray)})}>
+              <Text style={styles.itemname}>ADDTASK</Text>
+              </Pressable>
+               
+        </View>
+      
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/viewallproject.gif')} />

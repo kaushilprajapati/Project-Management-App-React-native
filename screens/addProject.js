@@ -7,7 +7,7 @@ import axios from "axios";
 
 export default function App({route}) {
     
-    const [projectname , setProjectname] = useState("");
+    const [projectName , setProjectName] = useState("");
     const [taskName , setTaskName] = useState("");
     const [taskDescription , settaskDescription] = useState("");
     const [assignedMember , setassignedMember] = useState("");
@@ -17,9 +17,11 @@ export default function App({route}) {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDateEndPickerVisible, setDateEndPickerVisibility] = useState(false);
     const [isComplete, setisComplete] = useState('');
-    const [projectArr , setProjectArr] = useState([]);
+    const [projectArrays , setProjectArrays] = useState(JSON.parse(route.params.projectData));
     const [userData , setUserData] = useState(JSON.parse(route.params.UData));
-    const [isOpen, setIsOpen] = useState(false);
+    const [isProjectOpen, setIsProjectOpen] = useState(false);
+
+    const [isUserOpen, setIsUserOpen] = useState(false);
 
     const [taskDetails , setTaskDetails] = useState([]);
     const [assignMemberId, setAssignMemberId] = useState({
@@ -27,13 +29,17 @@ export default function App({route}) {
    
     });
 
+    const [assignProjectId, setAssignProjectId] = useState({
+      projectName: "Select a Project for the Task",
+    });
+
 
  
   
 
     useEffect(() => {
-      getProjectMainList();
-      getProjectList();
+     // getProjectMainList();
+     getProjectList();
   }, []);
 
 
@@ -76,8 +82,8 @@ const getProjectList = () => {
       .then(function(response) {
         // alert(JSON.stringify(response.data));
         
-        setProjectArr(response.data);
-        console.log(projectArr);
+        setProjectArrays(response.data);
+        // console.log(projectArr);
   
       })
       .catch(error => {
@@ -122,22 +128,20 @@ const getProjectList = () => {
       return taskEndDate.toString();
     };
 
-    const checkMainProject = () =>{
+    // const checkMainProject = () =>{
        
-       for(var i = 0 ; i<projectArr.length;i++){
+    //    for(var i = 0 ; i<projectArr.length;i++){
             
-               if(projectArr[i].projectName == projectname){
-                 alert("alrady present");
-               }
+    //            if(projectArr[i].projectName == projectname){
+    //              alert("alrady present");
+    //            }
         
-       }
-    }
+    //    }
+    // }
 
     const handleSubmitTask = async () => {
 
       
-
-
       if (!taskName.trim() || !taskDescription.trim()) {
         alert("Please!!.. Enter Valid Inputs");
         return;
@@ -145,7 +149,7 @@ const getProjectList = () => {
       
       try {
         const response = await axios.post(`${baseUrl}/projects`, {
-          projectname,
+          projectName,
           taskName,
           taskDescription,
           assignedMember,
@@ -176,14 +180,44 @@ const getProjectList = () => {
     return (
       
         <SafeAreaView>
-        <View style={{ alignItems: 'center', justifyContent: 'center' , marginTop:100 }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' , marginTop:100 }}>  
               <View>
-              <TextInput
-            style={styles.textBoxes}
-            placeholder=" Project Name.... "
-            value={projectname}
-            onChangeText={ (v) => setProjectname(v)}
-            />
+
+              {/* for the project list  */}
+                
+              <TouchableOpacity
+          style={{ justifyContent: "center" }}
+          onPress={() => {
+            setIsProjectOpen(true);
+            getProjectMainList();
+          }}
+        >
+        <Text style={styles.textBoxes} >{assignProjectId.projectName}</Text>
+        </TouchableOpacity>
+        {isProjectOpen && (
+          <View style={[styles.textBoxes, { height: null }]}>
+            {isProjectOpen &&
+              projectArrays.map((i) => {
+                return (
+                  <View
+                    style={{ width: "80%", margin: 10, borderBottomWidth: 1 }}
+                  >
+                    <Text
+                      onPress={() => {
+                        setAssignProjectId({ projectName: i.projectName});
+                        setIsProjectOpen(false);
+                        setProjectName(i.projectName);
+                      }}
+                    >
+                      {i.projectName}
+                    </Text>
+                  </View>
+                );
+              })}
+          </View>
+        )}
+
+
               <TextInput
             style={styles.textBoxes}
             placeholder=" Task Name.... "
@@ -207,15 +241,15 @@ const getProjectList = () => {
 <TouchableOpacity
           style={{ justifyContent: "center" }}
           onPress={() => {
-            setIsOpen(true);
+            setIsUserOpen(true);
             getCharacters();
           }}
         >
         <Text style={styles.textBoxes} >{assignMemberId.email}</Text>
         </TouchableOpacity>
-        {isOpen && (
+        {isUserOpen && (
           <View style={[styles.textBoxes, { height: null }]}>
-            {isOpen &&
+            {isUserOpen &&
               userData.map((i) => {
                 return (
                   <View
@@ -224,7 +258,7 @@ const getProjectList = () => {
                     <Text
                       onPress={() => {
                         setAssignMemberId({ email: i.email});
-                        setIsOpen(false);
+                        setIsUserOpen(false);
                         setassignedMember(i.email);
                       }}
                     >
@@ -267,9 +301,6 @@ const getProjectList = () => {
           > {getDate()}</Text>
           </View>
 
-      
-
-
         <View style={styles.dateBox1} >
         <Pressable  onPress={showDateEndPicker}>
               <Text style={styles.DateTextshow} >End Date</Text>
@@ -295,12 +326,8 @@ const getProjectList = () => {
           </Pressable>
          </View>
 
-         <Button title='check project'
-         onPress={()=> checkMainProject()}/>
-
-        
-           
-
+         {/* <Button title='check project'
+         onPress={()=> checkMainProject()}/> */}
        </View>  
         
 

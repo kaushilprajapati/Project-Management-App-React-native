@@ -16,6 +16,8 @@ export default function App({navigation})  {
     const [userFname , setUserFname] = useState("");
     const [data , setData] = useState([]);
     const [projectData , setProjectData] = useState([]);
+    const [projectArr , setProjectArr] = useState([]);
+
     var inValid = false;
 
     
@@ -72,6 +74,7 @@ export default function App({navigation})  {
     useEffect(() => {
       getCharacters();
       getProjectList();
+      getProjectMainList();
     },[]);
   
 
@@ -90,8 +93,25 @@ export default function App({navigation})  {
         alert(error);
       });
   }
+
+  const getProjectMainList = () => {
+      
+    axios.get(`${baseUrl}/mainprojects`)
+    .then(function(response) {
+      // alert(JSON.stringify(response.data));
+      
+      setProjectArr(response.data);
+      // console.log(projectArr);
+
+    })
+    .catch(error => {
+      alert(error);
+    });
+}
+
+
  
-  const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData),  Udata: JSON.stringify(data)})}
+  const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData),  Udata: JSON.stringify(data), projectData: JSON.stringify(projectArr)})}
   const userHome = ()=>{navigation.navigate("UserHome",{ data: username ,  Pdata: JSON.stringify(projectData) })}
    
   

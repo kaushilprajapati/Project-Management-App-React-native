@@ -13,6 +13,7 @@ import ProjectInfo from './screens/projectInfo';
 import adminProjectList from './screens/adminProjectList';
 import userList from './screens/userList';
 import adminTaskList from './screens/adminTaskList';
+import addNewProject from './screens/addNewProject';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function MyStack() {
       <Stack.Screen name='ProjectInfo' component={ProjectInfo}/>
       <Stack.Screen name='userList' component={userList}/>
       <Stack.Screen name='adminTaskList' component={adminTaskList}/>
+      <Stack.Screen name='addNewProject' component={addNewProject}/>
       
 
     </Stack.Navigator>
