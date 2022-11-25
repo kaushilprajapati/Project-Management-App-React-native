@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import Constants from "expo-constants";
 
-const baseUrl = "http://10.0.2.2:3000";
+const baseUrl = "http://localhost:3000";
 
 export default function App() {
   const [firstName, setFirstName] = useState("");

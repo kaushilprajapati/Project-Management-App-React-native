@@ -1,6 +1,6 @@
 
 import React , {useState , useEffect, Component} from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput, SectionList} from 'react-native';
 import axios from "axios";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
@@ -9,39 +9,40 @@ export default function Projectlist({ route , navigation }) {
     const [name , setName] = useState(JSON.parse(route.params.a));
 
     const [data , setData] =  useState([]);
+
+    const [taskData, setTaskData] = useState([]);
     const [assignTask , setAssignTask] = useState([]);
     // const [projectData , setProjectData] = useState([]);
     const [id, setId] = useState(data._id);
-    
-    const baseUrl = "http://10.0.2.2:3000";
+    const [title, setTitle] = useState();
+    const baseUrl = "http://localhost:3000";
 
+      const projectTitle = data.taskName;
 
     //1 time page
     //2nd time page
     useEffect(() => {
-       
+        getProjects();
         getProjectList();
-        // projectDetails();
-    });
+        //  projectDetails();
+    },[]);
 
   
-  
-//      const getProjectList = () => {
+     const getProjectList = () => {
       
-//       axios.get('http://localhost:3000/projects')
-//       .then(function(response) {
-//         // alert(JSON.stringify(response.data));
+      axios.get('http://localhost:3000/projects')
+      .then(function(response) {
+        // alert(JSON.stringify(response.data));
         
-//         setData(response.data);
+        setTaskData(response.data);
        
+       // console.log(data);
   
-//         console.log(data);
-  
-//       })
-//       .catch(error => {
-//         alert(error);
-//       });
-//   }
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
 
 //   const projectDetails = () =>{
 //    var a = [];
@@ -70,7 +71,8 @@ const handleDelete= async (id) => {
    const response = await axios.delete(`${baseUrl}/projects/${id}`);
    if (response.status === 200) {
     alert(` You have deleted: ${JSON.stringify(response.data)}`);    
-    getProjectList();
+   getProjectList();
+   getProjects();
     } else {
     throw new Error("An error has occurred adding data");
   }
@@ -82,21 +84,34 @@ const handleDelete= async (id) => {
   
   
 
-const getProjectList = () => {
+// const getProjectList = () => {
       
-  axios.get(`${baseUrl}/projects`)
-  .then(function(response) {
-    // alert(JSON.stringify(response.data));
+//   axios.get(`${baseUrl}/projects`)
+//   .then(function(response) {
+//     // alert(JSON.stringify(response.data));
     
-    // setProjectData(response.data);
-    setData(response.data);
-    console.log(data);
+//     // setProjectData(response.data);
+//     setData(response.data);
+//     // console.log(data);
 
-  })
-  .catch(error => {
+//   })
+//   .catch(error => {
+//     alert(error);
+//   });
+// }
+
+
+const getProjects = () => {
+  axios.get(`${baseUrl}/mainProjects`)
+  .then(function(response) {
+
+    setData(response.data);
+
+  }).catch(error => {
     alert(error);
   });
 }
+
 
 
 const itemSeparator = () => {
@@ -104,43 +119,52 @@ const itemSeparator = () => {
    }
 
 
+  //  const Item = ({projectTitle}) => (
+  //   <View style={styles.item}>
+  //     <Text style={styles.title}>{projectTitle}</Text>
+  //   </View>
+  //  ); 
+
+
+  
+
+   
+
   return (
          
     <SafeAreaView>
         
-        {/* <Button title='get Data'
-        onPress={()=>projectDetails()}/> */}
-  
-    <ScrollView style={styles.scrollView}>
+     <ScrollView style={styles.scrollView}> 
     
     <FlatList
     data = {data}
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (
-        <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:JSON.stringify(item)})} >
+        <TouchableOpacity onPress= {()=>navigation.navigate("adminTaskList" , { projectName: JSON.stringify(item.projectName), project:JSON.stringify(item), data:JSON.stringify(taskData)})} >
         
-          <Swipeable renderLeftActions={() => 
+          {/* <Swipeable renderLeftActions={() => 
         
           <TouchableOpacity onPress={ () => handleDelete(item._id)} >
             <View style={styles.deletebox}>
               <Text style={styles.delete}>Delete</Text>
             </View>
           </TouchableOpacity>
-        } >
+        } > */}
 
             <View style={styles.item}>
                 <View style={styles.avatarContainer} >
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />
                 </View>
-                <Text style={styles.itemname}>{item.taskName}</Text>
+                <Text style={styles.itemname}>{item.projectName}</Text>
             </View>
-          </Swipeable>
+          {/* </Swipeable> */}
         </TouchableOpacity>
     )}
       
-    />
-    </ScrollView>  
+    /> 
+    
+     </ScrollView>  
 </SafeAreaView>
 
 );
@@ -224,6 +248,18 @@ const styles = StyleSheet.create({
     imagestyle:{
       width:40,
       height:40,
+    },
+    row: {
+      padding: 15,
+      marginBottom: 5,
+      backgroundColor: 'skyblue',
+    },
+    header: {
+      padding: 15,
+      marginBottom: 5,
+      backgroundColor: 'steelblue',
+      color: 'white',
+      fontWeight: 'bold',
     },
   
   });

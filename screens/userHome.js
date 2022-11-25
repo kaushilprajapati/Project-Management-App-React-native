@@ -18,6 +18,7 @@ export default function Projectlist({ route , navigation }) {
         // getProjectList();
         projectDetails();
        
+       
     },[]);
   
   //    const getProjectList = () => {
@@ -26,7 +27,7 @@ export default function Projectlist({ route , navigation }) {
   //     .then(function(response) {
   //       // alert(JSON.stringify(response.data));
         
-  //       setData(response.data);
+  //       setPtask(response.data);
        
   
   //       // console.log(data);
@@ -43,16 +44,15 @@ export default function Projectlist({ route , navigation }) {
     var a = [];
      Ptask.forEach((element) => {
          
-        //  console.log(element.assignedMember);
+        
         if(element.assignedMember == name){
              a.push(element);
-            //  console.log(a);
+           
             }
     setAssignTask(a);
    
     });
 
-    // console.log(Ptask);
  }
 
  

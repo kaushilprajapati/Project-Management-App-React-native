@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 
+
 import Login from './screens/login';
 import AddUser from './screens/addUser';
 import AdminHome from './screens/adminHome';
@@ -11,6 +12,7 @@ import Projectlist from './screens/Projectlist';
 import ProjectInfo from './screens/projectInfo';
 import adminProjectList from './screens/adminProjectList';
 import userList from './screens/userList';
+import adminTaskList from './screens/adminTaskList';
 
 const Stack = createStackNavigator();
 
@@ -27,8 +29,12 @@ export default function MyStack() {
       <Stack.Screen name="adminProjectList" component={adminProjectList}/>
       <Stack.Screen name='ProjectInfo' component={ProjectInfo}/>
       <Stack.Screen name='userList' component={userList}/>
+      <Stack.Screen name='adminTaskList' component={adminTaskList}/>
+      
+
     </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
 

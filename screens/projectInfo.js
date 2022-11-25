@@ -1,12 +1,12 @@
 import React , {useState, useEffect} from 'react';
 import { StyleSheet, Text, TextInput,View,  Image , Pressable, ScrollView } from 'react-native';
-import CheckBox from "./checkBox";
 import axios from "axios";
 
-const baseUrl = "http://10.0.2.2:3000";
+const baseUrl = "http://localhost:3000";
 
 export default function ProjectInfo({route}) {
 
+const [task , setTask] = useState([]);
     const [details, setDetails] = useState(JSON.parse(route.params.info));
     const[id , setid] = useState(details._id);
     const[taskName , setTaskName] = useState(details.taskName);
@@ -15,51 +15,45 @@ export default function ProjectInfo({route}) {
     const [taskRate , settaskRate] = useState(details.taskRate);  
     const [taskStartDate, settaskStartDate] = useState(details.taskStartDate);
     const [taskEndDate, settaskEndDate] = useState(details.taskEndDate);
-    const [isComplete, setisComplete] = useState(false);
+   
     const [taskStatus , setTaskStatus] = useState(details.taskStatus);
     const [totalHours , settotalHours] = useState(details.totalHours);
     const[totalAmount, settotalAmount] = useState('');
 
-    const baseUrl = "http://10.0.2.2:3000";
-
-    useEffect(() => {
-      getProjectList();
-  });
-
-  const getProjectList = () => {
+    const getProjectList = () => {
       
-    axios.get(`${baseUrl}/projects`)
-    .then(function(response) {
-      
-      // setProjectData(response.data);
-      setDetails(response.data);
-      // details = response.data;
-      // alert(JSON.stringify(response.data));
-      //  console.log(details);
-      //  alert(details.taskName);
-    })
-    .catch(error => {
-      alert(error);
-    });
+      axios.get('http://localhost:3000/projects')
+      .then(function(response) {
+        // alert(JSON.stringify(response.data));
+        
+        setTask(response.data);
+        console.log(task);
+  
+      })
+      .catch(error => {
+        alert(error);
+      });
+    
   }
 
+
+
+
+
+
+
    
    
-    function totalamount(){
-        var total = taskRate*totalHours;
-        var t = total.toString();
-        settotalAmount(t);
-    
-    }
+  
 
 
    // update taskinfo
 
-   const handleUpdateTask = async (event) => {
-    totalamount();
+   const handleUpdateTask = async () => {
+  
+    
     if (!totalHours) {
-      // alert(id);
-      // console.log(id);
+     
       alert("Please enter the total hours");
       return;
     }
@@ -74,17 +68,14 @@ export default function ProjectInfo({route}) {
         assignedMember:assignedMember,
         taskRate:taskRate,
         taskStatus:taskStatus,
-        isComplete:isComplete,
         totalHours:totalHours,
         totalAmount:totalAmount
       });
       if (response.status === 200) {
         alert(` You have updted: ${JSON.stringify(response.data)}`);
-        // console.log(id);
-        // console.log(response.data);
-        settotalHours(totalHours);
-        isComplete(true);
-        getProjectList();
+       
+        
+        
         } else {
         throw new Error("An error has occurred adding data");
       }
@@ -96,6 +87,7 @@ export default function ProjectInfo({route}) {
     
     
 return (
+ 
             <ScrollView>
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <View style={styles.item}>
@@ -114,14 +106,7 @@ return (
                         value={totalHours}
                         onChangeText={ (v) => settotalHours(v)}
                         />
-                    <View>
-                    <CheckBox
-                        style={styles.check}
-                        onPress={() => setisComplete(!isComplete)}
-                        title="Is Complete?"
-                        isChecked={isComplete}
-                    />
-                    </View>
+                   
                     <View>
                         <Pressable onPress={()=> handleUpdateTask()}>
                             <Text style={styles.submit}>UPDATE TASK</Text>

@@ -12,7 +12,7 @@ export default function Projectlist({ route , navigation }) {
     // const [projectData , setProjectData] = useState([]);
   
     
-    const baseUrl = "http://10.0.2.2:3000";
+    const baseUrl = "http://localhost:3000";
   
 
     //1 time page

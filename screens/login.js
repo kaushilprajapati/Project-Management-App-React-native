@@ -5,7 +5,7 @@ import axios from "axios";
 import { AsyncStorage } from 'react-native';
 import { LogBox } from 'react-native';
 
-const baseUrl = "http://10.0.2.2:3000";
+const baseUrl = "http://localhost:3000";
 
 LogBox.ignoreAllLogs();
 
@@ -18,6 +18,7 @@ export default function App({navigation})  {
     const [projectData , setProjectData] = useState([]);
     var inValid = false;
 
+    
     const getProjectList = () => {
       
       axios.get(`${baseUrl}/projects`)
@@ -70,7 +71,7 @@ export default function App({navigation})  {
   
     useEffect(() => {
       getCharacters();
-       getProjectList();
+      getProjectList();
     },[]);
   
 
@@ -91,7 +92,7 @@ export default function App({navigation})  {
   }
  
   const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData),  Udata: JSON.stringify(data)})}
-  const userHome = ()=>{navigation.navigate("UserHome",{ data: username,Pdata: JSON.stringify(projectData) })}
+  const userHome = ()=>{navigation.navigate("UserHome",{ data: username ,  Pdata: JSON.stringify(projectData) })}
    
   
 //   const auth = async () => {
@@ -132,6 +133,7 @@ export default function App({navigation})  {
 //   }
 
 const auth = () => {
+  console.log("its working")
   for(var i =0; i<data.length; i++) {
     if(username === data[i].email && password === data[i].password){
 

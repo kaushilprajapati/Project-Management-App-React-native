@@ -1,11 +1,13 @@
 
-import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View , Button, Pressable, SafeAreaView  } from 'react-native';
+import { useState , useEffect} from 'react';
+import { StyleSheet, Text, TextInput, FlatList, View,VariantsBox, TouchableOpacity , Button, Pressable, SafeAreaView  } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import axios from "axios";
 
-export default function App() {
 
+export default function App({route}) {
+    
+    const [projectname , setProjectname] = useState("");
     const [taskName , setTaskName] = useState("");
     const [taskDescription , settaskDescription] = useState("");
     const [assignedMember , setassignedMember] = useState("");
@@ -15,8 +17,75 @@ export default function App() {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDateEndPickerVisible, setDateEndPickerVisibility] = useState(false);
     const [isComplete, setisComplete] = useState('');
+    const [projectArr , setProjectArr] = useState([]);
+    const [userData , setUserData] = useState(JSON.parse(route.params.UData));
+    const [isOpen, setIsOpen] = useState(false);
 
-    const baseUrl = "http://10.0.2.2:3000";
+    const [taskDetails , setTaskDetails] = useState([]);
+    const [assignMemberId, setAssignMemberId] = useState({
+      email: "Assign Task To User",
+   
+    });
+
+
+ 
+  
+
+    useEffect(() => {
+      getProjectMainList();
+      getProjectList();
+  }, []);
+
+
+  const getCharacters = () => {
+      
+    axios.get(`${baseUrl}/users`)
+    .then(function(response) {
+      // alert(JSON.stringify(response.data));
+      
+      setUserData(response.data);
+
+      // console.log(data);
+
+    })
+    .catch(error => {
+      alert(error);
+    });
+}
+const getProjectList = () => {
+      
+  axios.get(`${baseUrl}/projects`)
+  .then(function(response) {
+    // alert(JSON.stringify(response.data));
+    
+    setTaskDetails(response.data);
+    // console.log(data);
+
+  })
+  .catch(error => {
+    alert(error);
+  });
+}
+
+
+
+
+    const getProjectMainList = () => {
+      
+      axios.get(`${baseUrl}/mainprojects`)
+      .then(function(response) {
+        // alert(JSON.stringify(response.data));
+        
+        setProjectArr(response.data);
+        console.log(projectArr);
+  
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
+    const baseUrl = "http://localhost:3000";
     // date start
     const showDatePicker = () => {
       setDatePickerVisibility(true);
@@ -32,13 +101,6 @@ export default function App() {
     };
 
     const getDate = () => {
-      // let tempDate1 = taskStartDate;
-      
-      // return taskStartDate !== ''
-      //   ? ` ${tempDate1[1]} ${tempDate1[2]} , ${tempDate1[3]}` 
-        
-      //   // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-      //   : '';
       return taskStartDate.toString();
     };
 
@@ -57,22 +119,25 @@ export default function App() {
     };
 
     const getEndDate = () => {
-      
-      // let tempDate = taskEndDate;
-      // return taskEndDate !== ''
-      //   ? ` ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-      //   // `${tempDate[0]} ${tempDate[1]} ${tempDate[2]} , ${tempDate[3]}`
-      //   : '';
       return taskEndDate.toString();
     };
 
-    // const Alert = () => {
-    //   alert('its working!!');
-    // }
-
-    // adding project data to database
+    const checkMainProject = () =>{
+       
+       for(var i = 0 ; i<projectArr.length;i++){
+            
+               if(projectArr[i].projectName == projectname){
+                 alert("alrady present");
+               }
+        
+       }
+    }
 
     const handleSubmitTask = async () => {
+
+      
+
+
       if (!taskName.trim() || !taskDescription.trim()) {
         alert("Please!!.. Enter Valid Inputs");
         return;
@@ -80,6 +145,7 @@ export default function App() {
       
       try {
         const response = await axios.post(`${baseUrl}/projects`, {
+          projectname,
           taskName,
           taskDescription,
           assignedMember,
@@ -89,6 +155,7 @@ export default function App() {
         });
         if (response.status === 200) {
           alert(` You have created: ${JSON.stringify(response.data)}`);
+          setProjectName('');
           setTaskName('');
           settaskDescription('');
           setassignedMember('');
@@ -103,12 +170,20 @@ export default function App() {
       }
     };
   
+
+    
   
     return (
       
         <SafeAreaView>
         <View style={{ alignItems: 'center', justifyContent: 'center' , marginTop:100 }}>
               <View>
+              <TextInput
+            style={styles.textBoxes}
+            placeholder=" Project Name.... "
+            value={projectname}
+            onChangeText={ (v) => setProjectname(v)}
+            />
               <TextInput
             style={styles.textBoxes}
             placeholder=" Task Name.... "
@@ -122,12 +197,47 @@ export default function App() {
             onChangeText={ (v) => settaskDescription(v)}
             />
 
-            <TextInput
+            {/* <TextInput
             style={styles.textBoxes}
             placeholder="Task Assign To...."
             value={assignedMember}
             onChangeText={ (v) => setassignedMember(v)}
-            />
+            /> */}
+
+<TouchableOpacity
+          style={{ justifyContent: "center" }}
+          onPress={() => {
+            setIsOpen(true);
+            getCharacters();
+          }}
+        >
+        <Text style={styles.textBoxes} >{assignMemberId.email}</Text>
+        </TouchableOpacity>
+        {isOpen && (
+          <View style={[styles.textBoxes, { height: null }]}>
+            {isOpen &&
+              userData.map((i) => {
+                return (
+                  <View
+                    style={{ width: "80%", margin: 10, borderBottomWidth: 1 }}
+                  >
+                    <Text
+                      onPress={() => {
+                        setAssignMemberId({ email: i.email});
+                        setIsOpen(false);
+                        setassignedMember(i.email);
+                      }}
+                    >
+                      {i.email}
+                    </Text>
+                  </View>
+                );
+              })}
+          </View>
+        )}
+      
+
+
 
             <TextInput
             style={styles.textBoxes}
@@ -178,13 +288,17 @@ export default function App() {
           >{getEndDate()}</Text>
          </View>
          <View>
+
+        
           <Pressable onPress={()=> handleSubmitTask()}>
             <Text style={styles.submit}>SUBMIT TASK</Text>
           </Pressable>
          </View>
 
+         <Button title='check project'
+         onPress={()=> checkMainProject()}/>
 
-      
+        
            
 
        </View>  
