@@ -8,7 +8,10 @@ export default function Projectlist({ route , navigation }) {
 
     const [name , setName] = useState(JSON.parse(route.params.a));
 
-    const [data , setData] =  useState([]);
+    const [data , setData] =  useState(JSON.parse(route.params.projectData));
+
+
+    const[pendingProjs, setPendingProjs] = useState([]);
 
     const [taskData, setTaskData] = useState([]);
     const [assignTask , setAssignTask] = useState([]);
@@ -22,8 +25,9 @@ export default function Projectlist({ route , navigation }) {
     //1 time page
     //2nd time page
     useEffect(() => {
-        getProjects();
+        // getProjects();
         getProjectList();
+        getPendingProject();
         //  projectDetails();
     },[]);
 
@@ -43,6 +47,23 @@ export default function Projectlist({ route , navigation }) {
         alert(error);
       });
   }
+  const getPendingProject = () => {
+    var a = [];
+       data.forEach((element) => {
+              // alert(data[0]._id);
+          //console.log(element.assignedMember);
+         if(element.isComplete == false){
+              a.push(element);
+              // console.log(a);
+         }
+        
+         setPendingProjs(a);
+     
+    });
+  }
+
+
+
 
 //   const projectDetails = () =>{
 //    var a = [];
@@ -66,21 +87,21 @@ const funcDelete = (id) => {
     alert(id);
 }
 
-const handleDelete= async (id) => {
-    try{
-   const response = await axios.delete(`${baseUrl}/projects/${id}`);
-   if (response.status === 200) {
-    alert(` You have deleted: ${JSON.stringify(response.data)}`);    
-   getProjectList();
-   getProjects();
-    } else {
-    throw new Error("An error has occurred adding data");
-  }
-}
-    catch(e) {
-        console.log(e);
-    }
-  }
+// const handleDelete= async (id) => {
+//     try{
+//    const response = await axios.delete(`${baseUrl}/projects/${id}`);
+//    if (response.status === 200) {
+//     alert(` You have deleted: ${JSON.stringify(response.data)}`);    
+//    getProjectList();
+//    getProjects();
+//     } else {
+//     throw new Error("An error has occurred adding data");
+//   }
+// }
+//     catch(e) {
+//         console.log(e);
+//     }
+//   }
   
   
 
@@ -101,16 +122,16 @@ const handleDelete= async (id) => {
 // }
 
 
-const getProjects = () => {
-  axios.get(`${baseUrl}/mainProjects`)
-  .then(function(response) {
+// const getProjects = () => {
+//   axios.get(`${baseUrl}/mainProjects`)
+//   .then(function(response) {
+//     setData(response.data);
+//   }).catch(error => {
+//     alert(error);
+//   });
+// }
 
-    setData(response.data);
 
-  }).catch(error => {
-    alert(error);
-  });
-}
 
 
 
@@ -137,7 +158,7 @@ const itemSeparator = () => {
      <ScrollView style={styles.scrollView}> 
     
     <FlatList
-    data = {data}
+    data = {pendingProjs}
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (

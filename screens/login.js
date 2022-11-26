@@ -17,6 +17,7 @@ export default function App({navigation})  {
     const [data , setData] = useState([]);
     const [projectData , setProjectData] = useState([]);
     const [projectArr , setProjectArr] = useState([]);
+    
 
     var inValid = false;
 
@@ -75,6 +76,7 @@ export default function App({navigation})  {
       getCharacters();
       getProjectList();
       getProjectMainList();
+      // getPendingProject();
     },[]);
   
 
@@ -110,7 +112,6 @@ export default function App({navigation})  {
 }
 
 
- 
   const adminHome = ()=>{navigation.navigate("AdminHome", { data: username , Pdata: JSON.stringify(projectData),  Udata: JSON.stringify(data), projectData: JSON.stringify(projectArr)})}
   const userHome = ()=>{navigation.navigate("UserHome",{ data: username ,  Pdata: JSON.stringify(projectData) })}
    

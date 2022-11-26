@@ -2,13 +2,9 @@ import { SafeAreaView, View, TextInput,Text, StyleSheet, Button} from "react-nat
 import { useState } from "react";
 import axios from "axios";
 
-
-
-
-
-
 export default function App () {
 const [projectName , setProjectName] = useState("");
+const [isComplete, setIsComplete] = useState(false);
 
 const baseUrl = "http://localhost:3000";
 
@@ -21,10 +17,12 @@ const handleSubmitProject = async () => {
     try {
       const response = await axios.post(`${baseUrl}/mainProjects`, {
         projectName,
+        isComplete
       });
       if (response.status === 200) {
         alert(` You have created: ${JSON.stringify(response.data)}`);
         setProjectName('');
+        setIsComplete('');
       } else {
         throw new Error("An error has occurred");
       }
@@ -32,14 +30,6 @@ const handleSubmitProject = async () => {
       alert("An error has occurred");
     }
   };
-
-
-
-
-
-
-
-
 
 
 return( 

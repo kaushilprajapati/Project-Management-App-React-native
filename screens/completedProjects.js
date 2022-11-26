@@ -1,71 +1,48 @@
 import React , {useState , useEffect} from 'react';
 import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
-import axios from "axios";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
-export default function Projectlist({ route , navigation }) {
+export default function App({ route }) {
+    const [projectArrays , setProjectArrays] = useState(JSON.parse(route.params.projectData));
+    const [completedProjs, setCompletedProjs] = useState([]);
 
-    const [name , setName] = useState(JSON.parse(route.params.projectName));
-   
-     const [taskData, setTaskData] = useState(JSON.parse(route.params.data));
-
-    // const [taskData, setTaskData] = useState([]);
-    const [data , setData] =  useState([]);
-    const [assignTask , setAssignTask] = useState([]);
-   
-    //1 time page
-    //2nd time page
     useEffect(() => {
-         getProjectList();
-        // taskDetails();
+        completedProjects();
     },[]);
-  
-     const getProjectList = () => {
+    
+    // const getProjectMainList = () => {
       
-      axios.get('http://localhost:3000/projects')
-      .then(function(response) {
-        // alert(JSON.stringify(response.data));
-        
-        setTaskData(response.data);
-        // console.log(taskData);
-  
-      })
-      .catch(error => {
-        alert(error);
-      });
-     taskDetails();
-  }
+    //     axios.get(`${baseUrl}/mainprojects`)
+    //     .then(function(response) {
+    //       // alert(JSON.stringify(response.data));
+          
+    //       setProjectArrays(response.data);
+    //       // console.log(projectArr);
+    
+    //     })
+    //     .catch(error => {
+    //       alert(error);
+    //     });
+    // }
 
-//   const projectDetails = async() =>{
-//    var a = [];
-//     const gg = await data.forEach((element) => {
-//         console.log(element.assignedMember);
-//        if(element.assignedMember == name){
-//             a.push(element);
-//            // console.log(a);
-//        }
-//        setAssignTask(a);
+
+const completedProjects = () =>{
+   var a = [];
+    projectArrays.forEach((element) => {
+            // alert(data[0]._id);
+        //console.log(element.assignedMember);
+       if(element.isComplete == true){
+            a.push(element);
+            // console.log(a);
+       }
+
+      
+       setCompletedProjs(a);
    
-//   });
-// }
-const taskDetails = () =>{
-     var a = [];
-      taskData.forEach((element) => {
-              // alert(data[0]._id);
-          //console.log(element.assignedMember);
-         if(element.projectName == name){
-              a.push(element);
-            //   console.log(a);
-  
-         }
-         setAssignTask(a);
-     
-    });
-  }
+  });
+}
 
-
-
-
+   
 
 const itemSeparator = () => {
     return <View style = {styles.separator} />
@@ -78,36 +55,34 @@ const itemSeparator = () => {
          
     <SafeAreaView>
         
-        {/* <Button title='get Data'
-        onPress={()=>projectDetails()}/> */}
+       
   
     <ScrollView style={styles.scrollView}>
-   <Text style={styles.textBoxes}>Task list for project: {name}</Text>
+    
     <FlatList
-    data = {assignTask}
+    data = {completedProjs}
     ItemSeparatorComponent = { itemSeparator }
 
     renderItem = { ( {item , index} ) => (
-        <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:JSON.stringify(item)})} >
-        
+        <TouchableOpacity onPress= {()=>alert("GG EZ PZ")} >
+{/*         
           <Swipeable renderLeftActions={() => 
-          {
         
           <TouchableOpacity onPress={ () => handleDelete(index)} >
             <View style={styles.deletebox}>
               <Text style={styles.delete}>Delete</Text>
             </View>
           </TouchableOpacity>
-        } }>
-         
+          }> */}
 
             <View style={styles.item}>
                 <View style={styles.avatarContainer} >
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />
                 </View>
-                <Text style={styles.itemname}>{item.taskName}</Text>
+                <Text style={styles.itemname}>{item.projectName}</Text>
+                <Text style={styles.itemname}>Total Amount: {item.totalAmount}</Text>
             </View>
-          </Swipeable>
+          {/* </Swipeable> */}
         </TouchableOpacity>
     )}
       
@@ -198,18 +173,5 @@ const styles = StyleSheet.create({
       width:40,
       height:40,
     },
-    textBoxes: {
-      width: 400, 
-      fontSize: 18,
-      padding: 12,
-      borderColor: 'black', 
-      borderWidth: 0.5,
-      borderRadius: 10,
-      marginBottom:10,
-      marginLeft:10,
-      marginTop:10,
-      textAlign:'center',
-      
-      },
   
-  });
+  })

@@ -26,7 +26,6 @@ export default function App({route}) {
     const [taskDetails , setTaskDetails] = useState([]);
     const [assignMemberId, setAssignMemberId] = useState({
       email: "Assign Task To User",
-   
     });
 
     const [assignProjectId, setAssignProjectId] = useState({

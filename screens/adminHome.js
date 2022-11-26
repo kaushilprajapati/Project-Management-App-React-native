@@ -91,7 +91,7 @@ export default function App({ route , navigation }) {
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/viewallproject.gif')} />
-              <Pressable onPress={()=>navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask)})}>
+              <Pressable onPress={()=>navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask) , projectData: JSON.stringify(projectArray)})}>
               <Text style={styles.itemname}>VIEWPROJECT</Text>
               </Pressable>
                
@@ -104,6 +104,17 @@ export default function App({ route , navigation }) {
               </Pressable>
                
         </View>
+
+
+        <View style={styles.item}>
+              
+              <Image style={styles.imagestyle} source = {require('../assets/viewusers.gif')} />
+              <Pressable onPress={()=>navigation.navigate("completedProjects" , {projectData: JSON.stringify(projectArray)})}>
+              <Text style={styles.itemname}>COMPLETEDPROJECTS</Text>
+              </Pressable>
+               
+        </View>
+        
        
        
     
@@ -134,8 +145,8 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       alignItems: 'center',
       
-      width:190,
-      maxHeight:50,
+      width:280,
+      maxHeight:80,
       padding:10,
       
       borderWidth:1,
@@ -155,9 +166,7 @@ const styles = StyleSheet.create({
       width: 55,
     },
     itemname:{
-      fontWeight:'600',
       fontSize:16,
-      
       color:'black',
   },
   imagestyle:{
