@@ -43,6 +43,9 @@ router.get('/:id', async(req,res) => {
 router.post('/', async(req,res) => { 
     let project = new mainProject({
         projectName : req.body.projectName,
+        totalAmount: req.body.totalAmount,
+        status: req.body.status,
+        isComplete: req.body.isComplete
     }) 
     project = await project.save();
 
@@ -91,6 +94,9 @@ router.put('/:id', async(req,res) => {
     {
         let project = {
             projectName: req.body.projectName,
+            totalAmount: req.body.totalAmount,
+            status: req.body.status,
+            isComplete: req.body.isComplete
             };
  
     const mainProjectList = await mainProject.findByIdAndUpdate(req.params.id, {$set:project}, {new: true});
