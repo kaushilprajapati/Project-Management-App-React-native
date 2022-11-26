@@ -1,7 +1,7 @@
 import { Button, Pressable, StyleSheet, Text, View , Image, TextInput } from 'react-native'
 import React , {useEffect, useState}from 'react'
 import {AsyncStorage} from 'react-native';
-
+import axios from "axios";
 export default function App({ route , navigation }) {
 
   const name = route.params.data;
@@ -11,29 +11,33 @@ export default function App({ route , navigation }) {
   const [UserData , setUserData] = useState(JSON.parse(route.params.Udata));
   const [projectArray , setProjectArray] = useState(JSON.parse(route.params.projectData));
   
+const baseUrl = "http://localhost:3000";
   useEffect(() => {
-    // checkSession();
+    
     
 }, []);
 
 
-  // const checkSession = async() => {
-  //   var value;
-  //   try {
-  //     value = await AsyncStorage.getItem('username');
-  //     if (value !== null) {
-  //       // We have data!!
-  //       console.log(value);
-  //     }
-  //   } catch (error) {
-  //     // Error retrieving data
-  //   }
-  //   if(value === null)
-  //   {
-  //     console.log("username is null");
-  //     loginScreen();
-  //   }
-  // }
+const getProjectMainList = () => {
+      
+  axios.get(`${baseUrl}/mainprojects`)
+  .then(function(response) {
+    // alert(JSON.stringify(response.data));
+    
+    setProjectArray(response.data);
+    // console.log(projectArr);
+
+  })
+  .catch(error => {
+    alert(error);
+  });
+}
+
+  const navigateToProectList = () =>{
+    getProjectMainList();
+    navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask) , projectData: JSON.stringify(projectArray)})
+  }
+
 
   const logOut = async() => {
     try {
@@ -50,12 +54,7 @@ export default function App({ route , navigation }) {
 
   return (
       <View style = {styles.container}>
-         <View style={{marginTop : 0, marginLeft: 280, marginBottom: 230}}>
-              <Button title = "Logout"
-              onPress= {()=>logOut()}
-              >
-              </Button>
-            </View>
+        
         <Text style={styles.textname}>Hello {name}!!</Text>
       
         
@@ -81,7 +80,7 @@ export default function App({ route , navigation }) {
 
         <View style={styles.item}>
               
-              <Image style={styles.imagestyle} source = {require('../assets/addproject.gif')} />
+              <Image style={styles.imagestyle} source = {require('../assets/addtask.gif')} />
               <Pressable onPress={()=>navigation.navigate("AddProject", {UData: JSON.stringify(UserData), projectData: JSON.stringify(projectArray)})}>
               <Text style={styles.itemname}>ADDTASK</Text>
               </Pressable>
@@ -91,7 +90,7 @@ export default function App({ route , navigation }) {
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/viewallproject.gif')} />
-              <Pressable onPress={()=>navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask) , projectData: JSON.stringify(projectArray)})}>
+              <Pressable onPress={()=>navigateToProectList()}>
               <Text style={styles.itemname}>VIEWPROJECT</Text>
               </Pressable>
                
@@ -108,9 +107,18 @@ export default function App({ route , navigation }) {
 
         <View style={styles.item}>
               
-              <Image style={styles.imagestyle} source = {require('../assets/viewusers.gif')} />
+              <Image style={styles.imagestyle} source = {require('../assets/complete.gif')} />
               <Pressable onPress={()=>navigation.navigate("completedProjects" , {projectData: JSON.stringify(projectArray)})}>
               <Text style={styles.itemname}>COMPLETEDPROJECTS</Text>
+              </Pressable>
+               
+        </View>
+
+        <View style={styles.item}>
+              
+              <Image style={styles.imagestyle} source = {require('../assets/logout.gif')} />
+              <Pressable onPress= {()=>logOut()}>
+              <Text style={styles.itemname}>LOGOUT</Text>
               </Pressable>
                
         </View>
@@ -137,7 +145,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom:270,
+    marginTop:50,
+    marginBottom:200,
     
     },
     item: {

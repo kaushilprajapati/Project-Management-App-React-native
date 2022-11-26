@@ -60,18 +60,7 @@ export default function App({navigation})  {
     }
   };
 
-  // const logOut = async() => {
-  //     try {
-  //         await AsyncStorage.removeItem('username');
-  //         console.log("Logout Done")
-  //         return true;
-  //     }
-  //     catch(exception) {
-  //       console.log("Error");
-  //         return false;
-  //     }
-  // }
-  
+
     useEffect(() => {
       getCharacters();
       getProjectList();
@@ -155,6 +144,9 @@ export default function App({navigation})  {
 
 const auth = () => {
   console.log("its working")
+  getCharacters();
+  getProjectList();
+  getProjectMainList();
   for(var i =0; i<data.length; i++) {
     if(username === data[i].email && password === data[i].password){
 

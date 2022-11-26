@@ -40,7 +40,7 @@ export default function Projectlist({ route , navigation }) {
         
         setTaskData(response.data);
        
-       // console.log(data);
+       
   
       })
       .catch(error => {

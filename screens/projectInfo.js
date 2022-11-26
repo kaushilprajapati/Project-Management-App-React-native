@@ -52,7 +52,7 @@ const [task , setTask] = useState([]);
    const handleUpdateTask = async () => {
   
     
-    if (!totalHours) {
+    if (taskStatus == "complete" && !totalHours) {
      
       alert("Please enter the total hours");
       return;

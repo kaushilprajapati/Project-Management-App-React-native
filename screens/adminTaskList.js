@@ -1,11 +1,12 @@
 import React , {useState , useEffect} from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput } from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput, Pressable } from 'react-native';
 import axios from "axios";
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 export default function Projectlist({ route , navigation }) {
 
     const [name , setName] = useState(JSON.parse(route.params.projectName));
+    const [taskStatusName , setTaskStatusName] = useState("");
    
      const [taskData, setTaskData] = useState(JSON.parse(route.params.data));
 
@@ -13,12 +14,11 @@ export default function Projectlist({ route , navigation }) {
     const [data , setData] =  useState([]);
     const [assignTask , setAssignTask] = useState([]);
    
-    //1 time page
-    //2nd time page
     useEffect(() => {
-         getProjectList();
-        // taskDetails();
-    },[]);
+      taskDetails();
+      
+  }, []);
+ 
   
      const getProjectList = () => {
       
@@ -28,6 +28,7 @@ export default function Projectlist({ route , navigation }) {
         
         setTaskData(response.data);
         // console.log(taskData);
+        
   
       })
       .catch(error => {
@@ -59,8 +60,48 @@ const taskDetails = () =>{
   
          }
          setAssignTask(a);
+         setTaskStatusName("")
      
     });
+  }
+
+  const completeTask = () =>{
+
+    var a = [];
+    assignTask.forEach((element) => {
+            // alert(data[0]._id);
+        //console.log(element.assignedMember);
+       if(element.taskStatus == 'complete'){
+            a.push(element);
+          //   console.log(a);
+
+       }
+       setAssignTask(a);
+       setTaskStatusName("Completed Task")
+      
+   
+  });
+
+  }
+
+  const runningTask = () =>{
+
+    var a = [];
+    assignTask.forEach((element) => {
+            // alert(data[0]._id);
+        //console.log(element.assignedMember);
+       if(element.taskStatus == 'running'){
+            a.push(element);
+          //   console.log(a);
+
+       }
+       setAssignTask(a);
+       setTaskStatusName("Running Task")
+       
+
+       
+  });
+
   }
 
 
@@ -78,11 +119,14 @@ const itemSeparator = () => {
          
     <SafeAreaView>
         
-        {/* <Button title='get Data'
-        onPress={()=>projectDetails()}/> */}
   
     <ScrollView style={styles.scrollView}>
-   <Text style={styles.textBoxes}>Task list for project: {name}</Text>
+    <View style={styles.buttonContainer}>
+      <Pressable style={styles.buttonTaskShow} onPress={()=>getProjectList()}><Text>ALL TASKS</Text></Pressable>
+      <Pressable style={styles.buttonTaskShow} onPress={()=>completeTask()}><Text>COMPLETED TASKS</Text></Pressable>
+      <Pressable style={styles.buttonTaskShow} onPress={()=>runningTask()}><Text>RUNNING TASKS</Text></Pressable>
+    </View>
+   <Text style={styles.textBoxes}>Project: {name} {taskStatusName}</Text>
     <FlatList
     data = {assignTask}
     ItemSeparatorComponent = { itemSeparator }
@@ -90,15 +134,7 @@ const itemSeparator = () => {
     renderItem = { ( {item , index} ) => (
         <TouchableOpacity onPress= {()=>navigation.navigate("ProjectInfo" , {info:JSON.stringify(item)})} >
         
-          <Swipeable renderLeftActions={() => 
-          {
         
-          <TouchableOpacity onPress={ () => handleDelete(index)} >
-            <View style={styles.deletebox}>
-              <Text style={styles.delete}>Delete</Text>
-            </View>
-          </TouchableOpacity>
-        } }>
          
 
             <View style={styles.item}>
@@ -106,8 +142,10 @@ const itemSeparator = () => {
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />
                 </View>
                 <Text style={styles.itemname}>{item.taskName}</Text>
+                <Text style={styles.MemberText}>Owner:</Text>
+                <Text style={styles.itemMember}>{item.assignedMember}</Text>
             </View>
-          </Swipeable>
+          
         </TouchableOpacity>
     )}
       
@@ -156,7 +194,20 @@ const styles = StyleSheet.create({
       fontWeight:'600',
       fontSize:16,
       marginLeft:13,
+      width:100,
   },
+    itemMember:{
+      fontWeight:'600',
+      fontSize:16,
+      textAlign:'center',
+      padding:5,
+      color:'#7393B3',
+      },
+      MemberText:{
+        fontWeight:'600',
+      fontSize:16,
+      
+      },
 
     deletebox:{
         backgroundColor:'red',
@@ -211,5 +262,24 @@ const styles = StyleSheet.create({
       textAlign:'center',
       
       },
+      buttonContainer:{
+        flex:1,
+        flexDirection:'row',
+        alignItems: 'center',
+        justifyContent:'center',
+      
+      },
+
+      buttonTaskShow:{
+        backgroundColor:'#FAF9F6',
+        borderColor:'black',
+        borderWidth:0.6,
+        marginTop:10,
+        marginRight:5,
+        borderRadius:5,
+        padding:5,
+
+
+      }
   
   });
