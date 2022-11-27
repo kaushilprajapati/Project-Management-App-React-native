@@ -2,14 +2,17 @@ import { SafeAreaView, View, TextInput,Text, StyleSheet, Button} from "react-nat
 import { useState } from "react";
 import axios from "axios";
 
-export default function App () {
+export default function App ({route}) {
 const [projectName , setProjectName] = useState("");
 const [isComplete, setIsComplete] = useState(false);
+
+//const [projectArray, setProjectArray] = useState(JSON.parse(route.params.PData));
 
 const baseUrl = "http://localhost:3000";
 
 const handleSubmitProject = async () => {
-
+    
+    
     if (!projectName.trim()) {
       alert("Please!!.. Enter Valid Inputs");
       return;
@@ -23,6 +26,8 @@ const handleSubmitProject = async () => {
         alert(` You have created: ${JSON.stringify(response.data)}`);
         setProjectName('');
         setIsComplete('');
+
+
       } else {
         throw new Error("An error has occurred");
       }
@@ -30,6 +35,24 @@ const handleSubmitProject = async () => {
       alert("An error has occurred");
     }
   };
+
+
+  const getProjectMainList = () => {
+      
+    axios.get(`${baseUrl}/mainprojects`)
+    .then(function(response) {
+      // alert(JSON.stringify(response.data));
+      
+      setProjectArray(response.data);
+      // console.log(projectArr);
+
+    })
+    .catch(error => {
+      alert(error);
+    });
+}
+
+
 
 
 return( 

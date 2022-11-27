@@ -11,7 +11,7 @@ export default function Projectlist({ route , navigation }) {
     const [data , setData] =  useState(JSON.parse(route.params.projectData));
 
 
-    const[pendingProjs, setPendingProjs] = useState([]);
+    const[pendingProjs, setPendingProjs] = useState(JSON.parse(route.params.pendingProjs));
 
     const [taskData, setTaskData] = useState([]);
     const [assignTask , setAssignTask] = useState([]);
@@ -26,8 +26,9 @@ export default function Projectlist({ route , navigation }) {
     //2nd time page
     useEffect(() => {
         // getProjects();
-        getProjectList();
+         getProjectList();
         getPendingProject();
+        
         //  projectDetails();
     },[]);
 
@@ -61,6 +62,8 @@ export default function Projectlist({ route , navigation }) {
      
     });
   }
+
+
 
 
 

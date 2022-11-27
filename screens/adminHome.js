@@ -2,20 +2,28 @@ import { Button, Pressable, StyleSheet, Text, View , Image, TextInput } from 're
 import React , {useEffect, useState}from 'react'
 import {AsyncStorage} from 'react-native';
 import axios from "axios";
-export default function App({ route , navigation }) {
+import { useIsFocused } from "@react-navigation/native"; 
 
+export default function App({ route , navigation }) {
+  const focus = useIsFocused(); 
   const name = route.params.data;
   const uName = name;
   const [Ptask , setPtask] = useState(JSON.parse(route.params.Pdata));
   const loginScreen = ()=>{navigation.navigate("Login")}
   const [UserData , setUserData] = useState(JSON.parse(route.params.Udata));
-  const [projectArray , setProjectArray] = useState(JSON.parse(route.params.projectData));
-  
+  const [projectArray , setProjectArray] = useState([]);
+  const [pendingProjs, setPendingProjs] = useState([]);
+  const [completedProjs, setCompletedProjs] = useState([]);
+ 
+
 const baseUrl = "http://localhost:3000";
   useEffect(() => {
-    
-    
-}, []);
+    if(focus == true){
+    getProjectMainList();
+    getPendingProject();
+    completedProjects();
+    }
+}, [focus]);
 
 
 const getProjectMainList = () => {
@@ -33,9 +41,48 @@ const getProjectMainList = () => {
   });
 }
 
+
+
+const getPendingProject = () => {
+  var a = [];
+     projectArray.forEach((element) => {
+            // alert(data[0]._id);
+        //console.log(element.assignedMember);
+       if(element.isComplete == false){
+            a.push(element);
+            // console.log(a);
+       }
+      
+       setPendingProjs(a);
+      //  console.log(pendingProjs);
+      //  alert(pendingProjs[0].projectName);
+   
+  });
+}
+
+const completedProjects = () =>{
+  var a = [];
+   projectArray.forEach((element) => {
+           // alert(data[0]._id);
+       //console.log(element.assignedMember);
+      if(element.isComplete == true){
+           a.push(element);
+           // console.log(a);
+      }
+
+     
+      setCompletedProjs(a);
+  
+ });
+}
+
+
+
+
+
   const navigateToProectList = () =>{
-    getProjectMainList();
-    navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask) , projectData: JSON.stringify(projectArray)})
+    //getPendingProject();
+    navigation.navigate("adminProjectList" , {a:JSON.stringify(uName) ,  PData: JSON.stringify(Ptask) , projectData: JSON.stringify(projectArray), pendingProjs: JSON.stringify(pendingProjs)})
   }
 
 
@@ -70,7 +117,7 @@ const getProjectMainList = () => {
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/addproject.gif')} />
-              <Pressable onPress={()=>navigation.navigate("addNewProject")}>
+              <Pressable onPress={()=>navigation.navigate("addNewProject" , {PData: JSON.stringify(projectArray)})}>
               <Text style={styles.itemname}>ADDPROJECT</Text>
               </Pressable>
                
@@ -108,7 +155,7 @@ const getProjectMainList = () => {
         <View style={styles.item}>
               
               <Image style={styles.imagestyle} source = {require('../assets/complete.gif')} />
-              <Pressable onPress={()=>navigation.navigate("completedProjects" , {projectData: JSON.stringify(projectArray)})}>
+              <Pressable onPress={()=>navigation.navigate("completedProjects" , {completedProjects: JSON.stringify(completedProjs), projectData: JSON.stringify(projectArray)})}>
               <Text style={styles.itemname}>COMPLETEDPROJECTS</Text>
               </Pressable>
                

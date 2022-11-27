@@ -33,11 +33,8 @@ export default function App({route}) {
     });
 
 
- 
-  
-
     useEffect(() => {
-     // getProjectMainList();
+     //getProjectMainList();
      getProjectList();
   }, []);
 
@@ -329,9 +326,6 @@ const getProjectList = () => {
          onPress={()=> checkMainProject()}/> */}
        </View>  
         
-
-    
-    
 
     </SafeAreaView>
    
