@@ -1,5 +1,5 @@
 import React , {useState , useEffect, props, useRef, useCallback,state, window} from 'react';
-import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput,RefreshControl} from 'react-native';
+import { StyleSheet, Text, View, FlatList, SafeAreaView , Image , TouchableOpacity, Button, ScrollView, TextInput,RefreshControl, Pressable} from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { useIsFocused } from "@react-navigation/native"; 
 import { NavigationContainer } from '@react-navigation/native';
@@ -84,9 +84,10 @@ const itemSeparator = () => {
 
   return (
     <SafeAreaView>
-        <Button title="Sort by Amount" 
-        onPress={()=>sortByAmount()}>
-        </Button>
+      <Pressable  onPress={()=>sortByAmount()}>
+        <Text style={styles.textBoxes} > Sort by Amount
+        </Text>
+        </Pressable>
     <ScrollView style={styles.scrollView}>
     <FlatList
     data = {completedProjs}
@@ -100,7 +101,7 @@ const itemSeparator = () => {
           />
     }
     renderItem = { ( {item , index, separators} ) => (
-        <TouchableOpacity onPress= {()=>alert("GG EZ PZ")} >
+        <TouchableOpacity  onPress= {()=>alert("This project is completed")} >
 {/*         
           <Swipeable renderLeftActions={() => 
         
@@ -144,6 +145,17 @@ const styles = StyleSheet.create({
       backgroundColor: '#CCC',
   
     },
+    textBoxes: {
+      width: 100, 
+      fontSize: 18,
+      padding: 12,
+      borderColor: 'gray', 
+      borderWidth: 0.5,
+      borderRadius: 10,
+      marginBottom:10,
+      marginLeft:60,
+      backgroundColor: 'green'
+      },
     item: {
       flex: 1,
       flexDirection:'row',

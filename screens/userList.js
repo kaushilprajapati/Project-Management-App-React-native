@@ -48,7 +48,7 @@ const itemSeparator = () => {
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />
                 </View>
                 <Text style={styles.itemname}>{item.firstName}</Text>
-                <Text style={styles.itemname}> , Job Title : {item.jobTitle}</Text>
+                <Text style={styles.itemname}>  Job Title : {item.jobTitle}</Text>
             </View>
           </Swipeable>
         </TouchableOpacity>

@@ -62,9 +62,7 @@ const projectDetails = () =>{
               console.log(a);
   
          }
-  
-        
-          
+
          setAssignTask(a);
      
     });

@@ -136,7 +136,7 @@ const itemSeparator = () => {
         
         
          
-
+            
             <View style={styles.item}>
                 <View style={styles.avatarContainer} >
                    <Image style={styles.imagestyle} source = {require('../assets/5956592.png')} />

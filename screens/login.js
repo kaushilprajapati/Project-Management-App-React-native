@@ -17,6 +17,8 @@ export default function App({navigation})  {
     const [data , setData] = useState([]);
     const [projectData , setProjectData] = useState([]);
     const [projectArr , setProjectArr] = useState([]);
+
+    const [pendingTasks, setPendingTasks] = useState([]);
     
 
     var inValid = false;

@@ -60,6 +60,9 @@ const getPendingProject = () => {
   });
 }
 
+
+
+
 const completedProjects = () =>{
   var a = [];
    projectArray.forEach((element) => {

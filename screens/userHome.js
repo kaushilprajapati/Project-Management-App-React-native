@@ -45,7 +45,7 @@ export default function Projectlist({ route , navigation }) {
      Ptask.forEach((element) => {
          
         
-        if(element.assignedMember == name){
+        if(element.assignedMember == name && element.taskStatus != "complete"){
              a.push(element);
            
             }
